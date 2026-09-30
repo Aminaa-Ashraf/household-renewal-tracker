@@ -1,0 +1,200 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MEMBER
+  VIEWER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  LEFT
+}
+
+enum DocumentType {
+  CNIC
+  PASSPORT
+  DRIVING_LICENSE
+  VEHICLE_PAPERS
+  INSURANCE
+  ACADEMIC_DEADLINE
+  OTHER
+}
+
+enum DocumentStatus {
+  ACTIVE
+  RENEWED
+  EXPIRED
+  ARCHIVED
+}
+
+enum ReminderWindow {
+  DAYS_30
+  DAYS_7
+  DAYS_1
+  EXPIRY
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts  Account[]
+  sessions  Session[]
+  memberships Membership[]
+  invitesSent Invite[] @relation("InvitesSent")
+
+  documentsOwned   Document[] @relation("DocumentPerson")
+  documentsCreated Document[] @relation("DocumentCreatedBy")
+  documentsUpdated Document[] @relation("DocumentUpdatedBy")
+  documentsRenewed Document[] @relation("DocumentRenewedBy")
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  refresh_token_expires_in Int?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Family {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  documents   Document[]
+  invites     Invite[]
+}
+
+model Membership {
+  id        String           @id @default(cuid())
+  userId    String
+  familyId  String
+  role      Role
+  status    MembershipStatus @default(ACTIVE)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, familyId])
+  @@index([familyId, status])
+}
+
+model Document {
+  id          String         @id @default(cuid())
+  familyId    String
+  personId    String
+  title       String
+  type        DocumentType
+  issueDate   DateTime?
+  expiryDate  DateTime
+  notes       String?
+  remind30    Boolean        @default(true)
+  remind7     Boolean        @default(true)
+  remind1     Boolean        @default(true)
+  status      DocumentStatus @default(ACTIVE)
+  createdById String
+  updatedById String?
+  renewedById String?
+  deletedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  family    Family        @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  person    User          @relation("DocumentPerson", fields: [personId], references: [id])
+  createdBy User          @relation("DocumentCreatedBy", fields: [createdById], references: [id])
+  updatedBy User?         @relation("DocumentUpdatedBy", fields: [updatedById], references: [id])
+  renewedBy User?         @relation("DocumentRenewedBy", fields: [renewedById], references: [id])
+  file      DocumentFile?
+  reminders ReminderLog[]
+
+  @@index([familyId, expiryDate])
+  @@index([familyId, deletedAt])
+  @@index([personId])
+}
+
+model DocumentFile {
+  id         String   @id @default(cuid())
+  documentId String   @unique
+  blobKey    String
+  fileName   String
+  mimeType   String
+  sizeBytes  Int
+  createdAt  DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Invite {
+  id          String    @id @default(cuid())
+  familyId    String
+  email       String
+  role        Role
+  token       String    @unique
+  invitedById String
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  family    Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  invitedBy User   @relation("InvitesSent", fields: [invitedById], references: [id])
+
+  @@index([familyId, email])
+}
+
+model ReminderLog {
+  id         String         @id @default(cuid())
+  documentId String
+  window     ReminderWindow
+  expiryDate DateTime
+  sentAt     DateTime       @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, window, expiryDate])
+}

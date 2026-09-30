@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
+import { auth } from "@/auth";
 import { AppShell } from "@/components/app-shell";
 
-export default function AppLayout({ children }: { children: ReactNode }) {
-  return <AppShell>{children}</AppShell>;
+export default async function AppLayout({ children }: { children: ReactNode }) {
+  const session = await auth();
+
+  return (
+    <AppShell userName={session?.user?.name ?? session?.user?.email}>
+      {children}
+    </AppShell>
+  );
 }

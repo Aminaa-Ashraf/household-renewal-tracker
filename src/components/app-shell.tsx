@@ -14,15 +14,23 @@ const nav = [
   { href: "/settings", label: "Settings", icon: SettingsIcon },
 ] as const;
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({
+  children,
+  userName,
+}: {
+  children: ReactNode;
+  userName?: string | null;
+}) {
   const pathname = usePathname();
 
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[240px_1fr]">
       <aside className="hidden border-r border-rule bg-paper-raised/80 px-5 py-6 md:flex md:flex-col">
         <BrandMark />
-        <p className="mt-6 text-sm text-ink-muted">{PREVIEW_FAMILY}</p>
-        <p className="text-xs text-ink-muted/80">Preview data · not saved yet</p>
+        <p className="mt-6 text-sm text-ink-muted">{userName ?? "Signed in"}</p>
+        <p className="text-xs text-ink-muted/80">
+          {PREVIEW_FAMILY} · preview papers
+        </p>
         <nav aria-label="App" className="mt-8 grid gap-2">
           {nav.map((item) => (
             <NavItem
@@ -38,7 +46,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-10 border-b border-rule bg-paper/90 px-4 py-3 backdrop-blur md:hidden">
           <div className="flex items-center justify-between gap-3">
             <BrandMark />
-            <p className="text-right text-xs text-ink-muted">{PREVIEW_FAMILY}</p>
+            <p className="text-right text-xs text-ink-muted">
+              {userName ?? PREVIEW_FAMILY}
+            </p>
           </div>
         </header>
 

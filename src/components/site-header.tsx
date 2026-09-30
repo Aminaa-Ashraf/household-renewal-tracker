@@ -6,9 +6,14 @@ export function SiteHeader() {
     <header className="border-b border-rule/80 bg-paper/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
         <BrandMark />
-        <ButtonLink href="/dashboard" variant="secondary">
-          Preview dashboard
-        </ButtonLink>
+        <div className="flex items-center gap-2">
+          <ButtonLink href="/login" variant="ghost">
+            Sign in
+          </ButtonLink>
+          <ButtonLink href="/signup" variant="secondary">
+            Create account
+          </ButtonLink>
+        </div>
       </div>
     </header>
   );

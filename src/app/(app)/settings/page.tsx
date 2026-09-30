@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
+import { auth } from "@/auth";
+import { SignOutButton } from "@/components/auth/sign-out-button";
+import { Card, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "Settings",
 };
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth();
+
   return (
     <div className="grid gap-6">
       <header>
@@ -13,14 +17,18 @@ export default function SettingsPage() {
           Settings
         </h1>
         <p className="mt-2 text-ink-muted">
-          Account, sign out, and leave-family live here later.
+          This is your account. Family settings come in the next chapters.
         </p>
       </header>
-      <ComingSoon
-        title="No account yet"
-        chapter="Chapter 3"
-        detail="Auth.js will add email/password, Google, and magic link. This page will then show who you are."
-      />
+
+      <Card>
+        <p className="text-sm font-medium text-terracotta">Signed in</p>
+        <CardTitle className="mt-2">{session?.user?.name ?? "Family member"}</CardTitle>
+        <p className="mt-2 text-ink-muted">{session?.user?.email}</p>
+        <div className="mt-6">
+          <SignOutButton />
+        </div>
+      </Card>
     </div>
   );
 }

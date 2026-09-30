@@ -27,11 +27,11 @@ export default function HomePage() {
             personal reminder app. English first. Large buttons. Calm layout.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/dashboard" size="lg">
-              Open the preview
+            <ButtonLink href="/signup" size="lg">
+              Create a free account
             </ButtonLink>
-            <ButtonLink href="#how-it-works" variant="secondary" size="lg">
-              How it works
+            <ButtonLink href="/login" variant="secondary" size="lg">
+              Sign in
             </ButtonLink>
           </div>
         </section>
@@ -84,8 +84,8 @@ export default function HomePage() {
             <CardTitle>Add the first 3 papers</CardTitle>
             <p className="mt-2 max-w-xl text-ink-muted">
               Start with the ones that hurt when they expire: a CNIC, a
-              passport, and one vehicle or insurance paper. Sign-in and real
-              saving start in the next chapters.
+              passport, and one vehicle or insurance paper. Sign in first.
+              Saving to the family vault starts in the next chapters.
             </p>
           </Card>
         </section>
@@ -94,7 +94,7 @@ export default function HomePage() {
       <footer className="border-t border-rule px-4 py-6">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
           <BrandMark />
-          <p className="text-sm text-ink-muted">Chapter 1 · shell only</p>
+          <p className="text-sm text-ink-muted">Chapter 3 · accounts</p>
         </div>
       </footer>
     </div>
