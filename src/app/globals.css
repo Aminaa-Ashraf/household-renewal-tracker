@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3eee3;
+  --paper-raised: #fbf7ee;
+  --ink: #1c1914;
+  --ink-muted: #5c564c;
+  --rule: #d6ccba;
+  --terracotta: #c45c26;
+  --terracotta-deep: #9a4318;
+  --olive: #4a6b3a;
+  --olive-soft: #e4eddc;
+  --amber: #a67c09;
+  --amber-soft: #f6e8c0;
+  --crimson: #9b2c2c;
+  --crimson-soft: #f5d6d6;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-rule: var(--rule);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-deep: var(--terracotta-deep);
+  --color-olive: var(--olive);
+  --color-olive-soft: var(--olive-soft);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-crimson: var(--crimson);
+  --color-crimson-soft: var(--crimson-soft);
+  --font-sans: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(196, 92, 38, 0.08), transparent 50%),
+    radial-gradient(900px 400px at 100% 0%, rgba(74, 107, 58, 0.08), transparent 45%),
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: #ead4c2;
+  color: var(--ink);
+}
