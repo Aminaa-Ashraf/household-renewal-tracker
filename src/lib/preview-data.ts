@@ -24,31 +24,31 @@ export const PREVIEW_FAMILY = "Khan Household";
 
 export const PREVIEW_DOCUMENTS: PreviewDocument[] = [
   {
-    id: "papa-passport",
-    title: "Papa's passport",
+    id: "father-passport",
+    title: "Father's passport",
     type: "Passport",
-    person: "Papa",
+    person: "Father",
     expiryDate: addDays(new Date(), 18),
   },
   {
-    id: "ammi-cnic",
-    title: "Ammi's CNIC",
+    id: "mother-cnic",
+    title: "Mother's CNIC",
     type: "CNIC",
-    person: "Ammi",
+    person: "Mother",
     expiryDate: addDays(new Date(), 6),
   },
   {
     id: "car-insurance",
     title: "Family car insurance",
     type: "Insurance",
-    person: "Papa",
+    person: "Father",
     expiryDate: addDays(new Date(), -4),
   },
   {
-    id: "hassan-license",
-    title: "Hassan's driving license",
+    id: "brother-license",
+    title: "Brother's driving license",
     type: "Driving License",
-    person: "Hassan",
+    person: "Brother",
     expiryDate: addDays(new Date(), 86),
   },
 ];

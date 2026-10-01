@@ -2,22 +2,22 @@ import Link from "next/link";
 import { BrandMark } from "@/components/brand-mark";
 import { ButtonLink } from "@/components/ui/button";
 
+const navLinkClass =
+  "hidden text-sm font-medium text-white/75 transition-colors hover:text-white sm:inline";
+
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-accent-deep/40 bg-accent text-white shadow-[0_10px_30px_-18px_rgba(23,71,54,0.7)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5">
         <BrandMark tone="inverse" />
-        <nav className="flex items-center gap-1 sm:gap-3">
-          <Link
-            href="/#how-it-works"
-            className="hidden text-sm font-medium text-white/75 transition-colors hover:text-white md:inline"
-          >
+        <nav className="flex items-center gap-1 sm:gap-4">
+          <Link href="/#home" className={navLinkClass}>
+            Home
+          </Link>
+          <Link href="/#how-it-works" className={navLinkClass}>
             How it works
           </Link>
-          <Link
-            href="/#privacy"
-            className="hidden text-sm font-medium text-white/75 transition-colors hover:text-white md:inline"
-          >
+          <Link href="/#privacy" className={navLinkClass}>
             Privacy
           </Link>
           <ButtonLink

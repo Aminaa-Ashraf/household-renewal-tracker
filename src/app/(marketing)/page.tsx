@@ -10,37 +10,19 @@ export default function HomePage() {
       <SiteHeader />
 
       <main>
-        {/* Hero */}
-        <section className="relative isolate overflow-hidden">
+        <section id="home" className="relative isolate overflow-hidden scroll-mt-24">
           <div className="relative mx-auto grid max-w-6xl gap-12 px-4 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-10 md:py-16 lg:py-20">
             <div className="grid gap-6 animate-rise">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">
-                For Pakistani families
+                Family paper vault
               </p>
               <h1 className="font-display text-4xl leading-[1.08] font-semibold tracking-tight text-ink md:text-5xl lg:text-[3.4rem]">
-                Know what is expiring before it becomes a{" "}
-                <span className="relative inline-block">
-                  scramble
-                  <svg
-                    aria-hidden
-                    className="squiggle absolute left-0 top-full text-amber-bright"
-                    viewBox="0 0 120 12"
-                    fill="none"
-                  >
-                    <path
-                      d="M2 8c18-6 28 4 46-2s28 5 44-1 18-3 26 1"
-                      stroke="currentColor"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                .
+                Know what is expiring before it becomes a scramble.
               </h1>
               <p className="max-w-xl text-lg leading-relaxed text-ink-muted">
-                One shared place for Ammi&apos;s CNIC, Abbu&apos;s passport, the
-                car&apos;s token tax and your insurance — so nobody finds out at
-                the counter.
+                One shared place for Mother&apos;s CNIC, Father&apos;s passport,
+                the car&apos;s token tax, and your insurance — so nobody finds
+                out at the counter.
               </p>
               <div className="flex flex-col items-stretch gap-3 sm:items-start">
                 <ButtonLink
@@ -67,7 +49,7 @@ export default function HomePage() {
                       Due soon
                     </p>
                     <p className="mt-1 text-sm text-ink-muted">
-                      Khan household · next 30 days
+                      Your household · next 30 days
                     </p>
                   </div>
                   <span className="rounded-full bg-amber-soft px-2.5 py-1 text-xs font-semibold text-amber">
@@ -77,20 +59,20 @@ export default function HomePage() {
 
                 <ul className="grid gap-2 p-1">
                   <HeroRow
-                    avatar={{ initial: "A", tone: "bg-[#dceee5] text-accent" }}
-                    title="Abbu's passport"
+                    avatar={{ initial: "F", tone: "bg-[#dceee5] text-accent" }}
+                    title="Father's passport"
                     meta="expires in 18 days · 19 Oct 2026"
                     badge={{ label: "Due soon", tone: "amber" }}
                   />
                   <HeroRow
-                    avatar={{ initial: "A", tone: "bg-crimson-soft text-crimson" }}
-                    title="Ammi's CNIC"
+                    avatar={{ initial: "M", tone: "bg-crimson-soft text-crimson" }}
+                    title="Mother's CNIC"
                     meta="expired 4 days ago · 27 Sept 2026"
                     badge={{ label: "Expired", tone: "red" }}
                   />
                   <HeroRow
                     avatar={{ initial: "C", tone: "bg-amber-soft text-amber" }}
-                    title="Car token tax (LEA-1234)"
+                    title="Car token tax"
                     meta="safe until Mar 2027"
                     badge={{ label: "All good", tone: "green" }}
                   />
@@ -100,10 +82,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* How it works */}
         <section
           id="how-it-works"
-          className="mx-auto max-w-6xl px-4 py-14 md:py-20"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 py-14 md:py-20"
         >
           <div className="mb-10 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
@@ -121,9 +102,13 @@ export default function HomePage() {
             >
               <div className="grid gap-2">
                 {[
-                  { title: "Ammi's CNIC", when: "7 days", tone: "text-crimson" },
                   {
-                    title: "Abbu's passport",
+                    title: "Mother's CNIC",
+                    when: "7 days",
+                    tone: "text-crimson",
+                  },
+                  {
+                    title: "Father's passport",
                     when: "18 days",
                     tone: "text-amber",
                   },
@@ -152,10 +137,10 @@ export default function HomePage() {
             >
               <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[
-                  { name: "Ammi", tone: "bg-crimson-soft text-crimson" },
-                  { name: "Abbu", tone: "bg-[#dceee5] text-accent" },
-                  { name: "Bhai", tone: "bg-amber-soft text-amber" },
-                  { name: "Sana", tone: "bg-[#e8e4f4] text-[#5b4d8a]" },
+                  { name: "Mother", tone: "bg-crimson-soft text-crimson" },
+                  { name: "Father", tone: "bg-[#dceee5] text-accent" },
+                  { name: "Brother", tone: "bg-amber-soft text-amber" },
+                  { name: "Sister", tone: "bg-[#e8e4f4] text-[#5b4d8a]" },
                 ].map((person) => (
                   <span
                     key={person.name}
@@ -193,7 +178,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Relatable moment */}
         <section className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
           <div className="paper-card relative overflow-hidden px-6 py-10 md:px-12 md:py-14">
             <div
@@ -202,8 +186,8 @@ export default function HomePage() {
             />
             <blockquote className="relative mx-auto max-w-3xl text-center">
               <p className="font-display text-2xl leading-snug font-semibold tracking-tight text-ink md:text-3xl md:leading-snug">
-                “We only noticed Abbu&apos;s passport had expired two weeks
-                before Umrah.”
+                “We only noticed Father&apos;s passport had expired two weeks
+                before the trip.”
               </p>
               <p className="mt-5 text-base text-ink-muted md:text-lg">
                 This app exists so that never happens to your family.
@@ -212,7 +196,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Reminders — email only (WhatsApp/SMS not supported yet) */}
         <section id="reminders" className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
           <div className="grid items-center gap-8 md:grid-cols-[1fr_1.05fr] md:gap-12">
             <div>
@@ -224,33 +207,34 @@ export default function HomePage() {
               </h2>
               <p className="mt-4 max-w-md text-ink-muted">
                 We email you at 30, 7, and 1 day before expiry — and on the day
-                itself — so Ammi&apos;s CNIC doesn&apos;t sneak up on you.
+                itself — so Mother&apos;s CNIC doesn&apos;t sneak up on you.
               </p>
             </div>
 
             <div className="paper-card mx-auto w-full max-w-md p-5">
               <div className="mb-3 flex items-center gap-2 text-sm font-medium text-ink-muted">
-                <span className="grid size-8 place-items-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
-                  <ChatIcon />
+                <span className="grid size-8 place-items-center rounded-full bg-olive-soft text-accent">
+                  <MailIcon />
                 </span>
-                Reminder preview
+                Email reminder
               </div>
-              <div className="rounded-[20px] rounded-bl-md bg-[#dcf8c6] px-4 py-3 text-[15px] leading-relaxed text-ink shadow-sm">
-                Reminder: Ammi&apos;s CNIC expires in 7 days. Tap to see what to
-                bring to NADRA.
-                <span className="mt-2 block text-right text-xs text-ink-muted">
-                  via email · 9:00 am
-                </span>
+              <div className="rounded-[20px] border border-rule/70 bg-paper px-4 py-3 text-[15px] leading-relaxed text-ink">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+                  Household Renewal Tracker
+                </p>
+                <p className="mt-2">
+                  Reminder: Mother&apos;s CNIC expires in 7 days. Open the
+                  vault to renew it in time.
+                </p>
               </div>
-              <p className="mt-4 text-sm text-ink-muted">
-                Reminders come by email today. WhatsApp and SMS can come later.
-              </p>
             </div>
           </div>
         </section>
 
-        {/* Trust & privacy */}
-        <section id="privacy" className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
+        <section
+          id="privacy"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-14 md:pb-20"
+        >
           <div className="mb-8 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
               Trust & privacy
@@ -262,18 +246,18 @@ export default function HomePage() {
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {
-                title: "Your documents are encrypted",
-                text: "Files are stored privately and only opened by people in your household vault.",
+                title: "Your documents stay private",
+                text: "Files are stored securely and only opened by people in your household.",
                 icon: LockIcon,
               },
               {
                 title: "Only family you invite",
-                text: "Nobody sees a paper unless you invite them. Viewers and members stay in your control.",
+                text: "Nobody sees a paper unless you invite them.",
                 icon: PeopleIcon,
               },
               {
                 title: "We never sell your data",
-                text: "No ads. No data brokers. Your CNIC and passport dates are not a product.",
+                text: "No ads. No data brokers. Your family dates stay yours.",
                 icon: ShieldIcon,
               },
             ].map((item) => (
@@ -290,7 +274,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* First 3 papers */}
         <section className="mx-auto max-w-6xl px-4 pb-16">
           <div className="paper-card grid gap-8 p-6 md:grid-cols-[1.1fr_0.9fr] md:items-center md:p-8">
             <div>
@@ -299,7 +282,7 @@ export default function HomePage() {
               </h2>
               <p className="mt-3 max-w-xl text-ink-muted">
                 Start with the ones that hurt when they expire. Sign in, add
-                them, then invite Abbu, Ammi, or Bhai.
+                them, then invite your family.
               </p>
               <div className="mt-6">
                 <ButtonLink href="/signup">Add my first paper</ButtonLink>
@@ -330,8 +313,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FAQ for footer link */}
-        <section id="faq" className="mx-auto max-w-6xl px-4 pb-16">
+        <section
+          id="faq"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-16"
+        >
           <h2 className="font-display text-2xl font-semibold tracking-tight">
             Quick answers
           </h2>
@@ -343,11 +328,11 @@ export default function HomePage() {
               },
               {
                 q: "Do I need to upload files?",
-                a: "Dates work on their own. Attach a scan when you want it handy.",
+                a: "No. Dates work on their own. Attach a scan only if you want it handy.",
               },
               {
                 q: "How do reminders arrive?",
-                a: "By email for now — ahead of expiry, so you have time for NADRA or the embassy.",
+                a: "By email, ahead of expiry, so you have time to renew.",
               },
             ].map((item) => (
               <div key={item.q} className="border-t border-rule pt-4">
@@ -370,17 +355,14 @@ export default function HomePage() {
             </p>
           </div>
           <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
-            <Link href="/#privacy" className="text-white/70 hover:text-white">
-              Privacy
-            </Link>
-            <a
-              href="mailto:hello@householdrenewal.tracker"
-              className="text-white/70 hover:text-white"
-            >
-              Contact
-            </a>
             <Link href="/#faq" className="text-white/70 hover:text-white">
               FAQ
+            </Link>
+            <Link href="/signup" className="text-white/70 hover:text-white">
+              Create account
+            </Link>
+            <Link href="/login" className="text-white/70 hover:text-white">
+              Sign in
             </Link>
           </nav>
         </div>
@@ -458,10 +440,25 @@ function StepCard({
   );
 }
 
-function ChatIcon() {
+function MailIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden>
-      <path d="M12 3c-4.8 0-8.5 3.2-8.5 7.2 0 2.4 1.3 4.5 3.4 5.8l-.7 3.2 3.4-1.8c.7.2 1.5.3 2.4.3 4.8 0 8.5-3.2 8.5-7.2S16.8 3 12 3Z" />
+    <svg viewBox="0 0 24 24" className="size-4" fill="none" aria-hidden>
+      <rect
+        x="3.5"
+        y="6"
+        width="17"
+        height="12"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <path
+        d="m4.5 8 7.5 5 7.5-5"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

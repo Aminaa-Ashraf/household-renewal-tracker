@@ -183,13 +183,6 @@ body > * {
   box-shadow: var(--shadow-press);
 }
 
-.squiggle {
-  display: block;
-  width: 7.5rem;
-  height: 0.7rem;
-  margin-top: 0.15rem;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .animate-rise,
   .animate-rise-delay-1,
