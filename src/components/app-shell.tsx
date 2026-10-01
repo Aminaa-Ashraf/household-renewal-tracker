@@ -3,8 +3,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { Role } from "@prisma/client";
 import { BrandMark } from "@/components/brand-mark";
-import { PREVIEW_FAMILY } from "@/lib/preview-data";
+import { roleLabel } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -17,11 +18,18 @@ const nav = [
 export function AppShell({
   children,
   userName,
+  familyName,
+  role,
+  canAdd,
 }: {
   children: ReactNode;
   userName?: string | null;
+  familyName: string;
+  role: Role;
+  canAdd: boolean;
 }) {
   const pathname = usePathname();
+  const items = canAdd ? nav : nav.filter((item) => item.href !== "/documents/new");
 
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[240px_1fr]">
@@ -29,10 +37,10 @@ export function AppShell({
         <BrandMark />
         <p className="mt-6 text-sm text-ink-muted">{userName ?? "Signed in"}</p>
         <p className="text-xs text-ink-muted/80">
-          {PREVIEW_FAMILY} · preview papers
+          {familyName} · {roleLabel(role)}
         </p>
         <nav aria-label="App" className="mt-8 grid gap-2">
-          {nav.map((item) => (
+          {items.map((item) => (
             <NavItem
               key={item.href}
               {...item}
@@ -46,9 +54,7 @@ export function AppShell({
         <header className="sticky top-0 z-10 border-b border-rule bg-paper/90 px-4 py-3 backdrop-blur md:hidden">
           <div className="flex items-center justify-between gap-3">
             <BrandMark />
-            <p className="text-right text-xs text-ink-muted">
-              {userName ?? PREVIEW_FAMILY}
-            </p>
+            <p className="text-right text-xs text-ink-muted">{familyName}</p>
           </div>
         </header>
 
@@ -60,8 +66,13 @@ export function AppShell({
           aria-label="App"
           className="fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper-raised/95 px-2 py-2 backdrop-blur md:hidden"
         >
-          <ul className="grid grid-cols-4 gap-1">
-            {nav.map((item) => (
+          <ul
+            className={cn(
+              "grid gap-1",
+              items.length === 4 ? "grid-cols-4" : "grid-cols-3",
+            )}
+          >
+            {items.map((item) => (
               <li key={item.href}>
                 <NavItem
                   {...item}
@@ -78,7 +89,10 @@ export function AppShell({
 }
 
 function isActive(pathname: string, href: string) {
-  return pathname === href;
+  if (href === "/documents/new") {
+    return pathname.startsWith("/documents");
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 function NavItem({
@@ -106,7 +120,7 @@ function NavItem({
       )}
       aria-current={active ? "page" : undefined}
     >
-      <Icon className={cn("size-5", compact && "size-5")} />
+      <Icon className="size-5" />
       {label}
     </Link>
   );

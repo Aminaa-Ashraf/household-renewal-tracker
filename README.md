@@ -8,10 +8,12 @@ Built for parents and adult children, not a personal reminder app.
 
 ## What it does
 
-- Shows what is expiring, whose paper it is, and how soon
+- Shows what is expiring, whose it is, and how soon
 - Color states: safe, due in 30 days, due in 7 days, expired
-- Filters the due-soon list by person and document type
-- Keeps the family in one shared space (Owner, Member, Viewer)
+- Shared household with Owner, Member, and Viewer roles
+- Invite family by email and accept an invite link
+- Private image/PDF uploads with authorized download
+- Daily reminder emails at 30 / 7 / 1 days and on expiry day
 
 ## Stack
 
@@ -21,19 +23,28 @@ Built for parents and adult children, not a personal reminder app.
 | UI | React 19, Tailwind CSS |
 | Data | PostgreSQL + Prisma |
 | Auth | Auth.js (email/password, optional Google and magic link) |
-| Hosting | Vercel-ready |
+| Files | Vercel Blob (or local `/storage` fallback) |
+| Email | Resend (or console log in local dev) |
+| Hosting | Vercel + daily cron |
 
 ## Quick start
 
 ```bash
 npm install
 cp .env.example .env
-# set DATABASE_URL to household_renewal_tracker
+# set DATABASE_URL, AUTH_SECRET, AUTH_URL
 npx prisma migrate dev
+npm run db:seed
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+Demo login after seed:
+
+- `papa@khan.demo` / `demo-pass-123` (owner)
+- `ammi@khan.demo` / `demo-pass-123` (member)
+- `hassan@khan.demo` / `demo-pass-123` (viewer)
 
 ## Routes
 
@@ -42,9 +53,12 @@ Open [http://localhost:3000](http://localhost:3000).
 | `/` | Public home |
 | `/login` | Sign in |
 | `/signup` | Create an account |
+| `/onboarding` | Create your household |
 | `/dashboard` | Due-soon list |
 | `/documents/new` | Add a paper |
+| `/documents/[id]` | Paper details, file preview, reminders |
 | `/family` | Members and invites |
+| `/invites/[token]` | Accept invite |
 | `/settings` | Account |
 
 ## Environment
@@ -56,10 +70,24 @@ Open [http://localhost:3000](http://localhost:3000).
 | `AUTH_URL` | App URL, e.g. `http://localhost:3000` |
 | `GOOGLE_CLIENT_ID` | Optional Google sign-in |
 | `GOOGLE_CLIENT_SECRET` | Optional Google sign-in |
-| `RESEND_API_KEY` | Optional magic-link email |
-| `EMAIL_FROM` | Sender for magic-link email |
+| `RESEND_API_KEY` | Optional invite + reminder email |
+| `EMAIL_FROM` | Sender address |
+| `BLOB_READ_WRITE_TOKEN` | Optional Vercel Blob private uploads |
+| `CRON_SECRET` | Protects the daily reminder job |
 
-Use a dedicated database. Do not point this app at another project’s database.
+Without `RESEND_API_KEY`, emails print to the server console. Without `BLOB_READ_WRITE_TOKEN`, files save under `/storage` and stay private through `/api/files/[id]`.
+
+## Test reminders locally
+
+1. Seed or create a paper with an expiry date 7 days from today.
+2. Run:
+
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/reminders
+```
+
+3. Check the terminal for `[email:dev]` output (or your Resend inbox).
+4. Open the paper — the reminder log should show the window once.
 
 ## Scripts
 
@@ -69,6 +97,7 @@ npm run build
 npm run start
 npm run db:migrate
 npm run db:studio
+npm run db:seed
 ```
 
 ## License

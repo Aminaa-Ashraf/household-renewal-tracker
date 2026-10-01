@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
-import { Input } from "@/components/ui/input";
+import { redirect } from "next/navigation";
+import { DocumentForm } from "@/components/documents/document-form";
+import { canUploadDocuments } from "@/lib/roles";
+import { listActiveFamilyMembers } from "@/server/documents";
+import { requireFamilyMembership } from "@/server/family";
+import { requireSession } from "@/server/session";
 
 export const metadata: Metadata = {
   title: "Add document",
 };
 
-export default function NewDocumentPage() {
+export default async function NewDocumentPage() {
+  const session = await requireSession();
+  const membership = await requireFamilyMembership(session.user.id);
+
+  if (!canUploadDocuments(membership.role)) {
+    redirect("/dashboard");
+  }
+
+  const members = await listActiveFamilyMembers(membership.familyId);
+
   return (
     <div className="grid gap-6">
       <header>
@@ -14,31 +27,17 @@ export default function NewDocumentPage() {
           Add a paper
         </h1>
         <p className="mt-2 text-ink-muted">
-          The form look is here. Saving to Postgres starts in Chapter 5.
+          Title, type, whose it is, and the expiry date. Photo is optional.
         </p>
       </header>
 
-      <ComingSoon
-        title="This form will create a real document"
-        chapter="Chapter 5"
-        detail="You will type a title, pick a type, choose a family member, and set an expiry date. Nothing is stored yet."
+      <DocumentForm
+        members={members.map((member) => ({
+          id: member.user.id,
+          name: member.user.name ?? member.user.email ?? "Family member",
+        }))}
+        initial={{ personId: session.user.id }}
       />
-
-      <form className="grid gap-4" aria-disabled="true">
-        <Input
-          label="Title"
-          name="title"
-          placeholder="Papa's passport"
-          disabled
-        />
-        <Input
-          label="Expiry date"
-          name="expiryDate"
-          type="date"
-          hint="Required once this page is live."
-          disabled
-        />
-      </form>
     </div>
   );
 }

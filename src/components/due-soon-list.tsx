@@ -1,30 +1,73 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { StatusBadge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatLongDate, formatRelativeExpiry } from "@/lib/dates";
 import { getUrgency } from "@/lib/document-status";
-import {
-  DOCUMENT_TYPES,
-  type PreviewDocument,
-} from "@/lib/preview-data";
+import { DOCUMENT_TYPE_OPTIONS, documentTypeLabel } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
-export function DueSoonList({ documents }: { documents: PreviewDocument[] }) {
+export type DueSoonItem = {
+  id: string;
+  title: string;
+  type: string;
+  person: string;
+  personId: string;
+  expiryDate: string;
+};
+
+export function DueSoonList({
+  documents,
+  canAdd,
+}: {
+  documents: DueSoonItem[];
+  canAdd: boolean;
+}) {
   const [person, setPerson] = useState("all");
   const [type, setType] = useState("all");
 
-  const people = useMemo(
-    () => [...new Set(documents.map((doc) => doc.person))].sort(),
-    [documents],
-  );
+  const people = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const doc of documents) {
+      map.set(doc.personId, doc.person);
+    }
+    return [...map.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [documents]);
 
   const visible = documents
-    .filter((doc) => (person === "all" ? true : doc.person === person))
+    .filter((doc) => (person === "all" ? true : doc.personId === person))
     .filter((doc) => (type === "all" ? true : doc.type === type))
     .slice()
-    .sort((a, b) => a.expiryDate.getTime() - b.expiryDate.getTime());
+    .sort(
+      (a, b) =>
+        new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime(),
+    );
+
+  if (documents.length === 0) {
+    return (
+      <Card className="grid gap-4 text-center">
+        <p className="font-display text-xl font-semibold">
+          Add the first 3 papers
+        </p>
+        <p className="text-ink-muted">
+          Start with a CNIC, a passport, and one vehicle or insurance paper.
+          The home screen will then show what is due soon.
+        </p>
+        {canAdd ? (
+          <div className="flex justify-center">
+            <ButtonLink href="/documents/new">Add a paper</ButtonLink>
+          </div>
+        ) : (
+          <p className="text-sm text-ink-muted">
+            Ask an owner or member to upload the first papers.
+          </p>
+        )}
+      </Card>
+    );
+  }
 
   return (
     <div className="grid gap-4">
@@ -36,7 +79,7 @@ export function DueSoonList({ documents }: { documents: PreviewDocument[] }) {
           onChange={setPerson}
           options={[
             { value: "all", label: "Everyone" },
-            ...people.map((name) => ({ value: name, label: name })),
+            ...people.map(([id, name]) => ({ value: id, label: name })),
           ]}
         />
         <FilterField
@@ -46,13 +89,21 @@ export function DueSoonList({ documents }: { documents: PreviewDocument[] }) {
           onChange={setType}
           options={[
             { value: "all", label: "All types" },
-            ...DOCUMENT_TYPES.map((name) => ({ value: name, label: name })),
+            ...DOCUMENT_TYPE_OPTIONS.map((option) => ({
+              value: option.value,
+              label: option.label,
+            })),
           ]}
         />
       </div>
 
       {visible.length === 0 ? (
-        <EmptyFilterState />
+        <Card className="text-center">
+          <p className="font-display text-lg font-semibold">No papers match</p>
+          <p className="mt-2 text-sm text-ink-muted">
+            Try Everyone and All types.
+          </p>
+        </Card>
       ) : (
         <ul className="grid gap-3">
           {visible.map((doc) => (
@@ -64,8 +115,9 @@ export function DueSoonList({ documents }: { documents: PreviewDocument[] }) {
   );
 }
 
-function DueSoonCard({ document }: { document: PreviewDocument }) {
-  const urgency = getUrgency(document.expiryDate);
+function DueSoonCard({ document }: { document: DueSoonItem }) {
+  const expiry = new Date(document.expiryDate);
+  const urgency = getUrgency(expiry);
   const rail = {
     safe: "border-l-olive",
     due30: "border-l-amber",
@@ -75,29 +127,30 @@ function DueSoonCard({ document }: { document: PreviewDocument }) {
 
   return (
     <li>
-      <article
+      <Link
+        href={`/documents/${document.id}`}
         className={cn(
-          "rounded-2xl border border-rule bg-paper-raised p-4 pl-5 shadow-[0_1px_0_rgba(28,25,20,0.04)]",
-          "border-l-4",
+          "block rounded-2xl border border-rule bg-paper-raised p-4 pl-5 shadow-[0_1px_0_rgba(28,25,20,0.04)]",
+          "border-l-4 transition-colors hover:border-ink/20",
           rail,
         )}
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h3 className="font-display text-lg font-semibold">{document.title}</h3>
+            <h3 className="font-display text-lg font-semibold">
+              {document.title}
+            </h3>
             <p className="mt-1 text-sm text-ink-muted">
-              {document.person} · {document.type}
+              {document.person} · {documentTypeLabel(document.type)}
             </p>
           </div>
           <StatusBadge urgency={urgency} />
         </div>
         <p className="mt-4 text-base font-medium">
-          {formatRelativeExpiry(document.expiryDate)}
+          {formatRelativeExpiry(expiry)}
         </p>
-        <p className="text-sm text-ink-muted">
-          {formatLongDate(document.expiryDate)}
-        </p>
-      </article>
+        <p className="text-sm text-ink-muted">{formatLongDate(expiry)}</p>
+      </Link>
     </li>
   );
 }
@@ -133,16 +186,5 @@ function FilterField({
         ))}
       </select>
     </div>
-  );
-}
-
-function EmptyFilterState() {
-  return (
-    <Card className="text-center">
-      <p className="font-display text-lg font-semibold">No papers match</p>
-      <p className="mt-2 text-sm text-ink-muted">
-        Try Everyone and All types, or add a paper in a later chapter.
-      </p>
-    </Card>
   );
 }

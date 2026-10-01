@@ -40,7 +40,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
       email: payload.email,
       password: payload.password,
       redirect: false,
-      callbackUrl: "/dashboard",
+      callbackUrl: "/onboarding",
     });
 
     setPending(undefined);
@@ -50,13 +50,13 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
       return;
     }
 
-    window.location.assign(result?.url ?? "/dashboard");
+    window.location.assign(result?.url ?? "/onboarding");
   }
 
   async function onGoogle() {
     setError(undefined);
     setPending("google");
-    await signIn("google", { callbackUrl: "/dashboard" });
+    await signIn("google", { callbackUrl: "/onboarding" });
   }
 
   return (

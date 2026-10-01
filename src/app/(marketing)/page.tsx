@@ -94,7 +94,7 @@ export default function HomePage() {
       <footer className="border-t border-rule px-4 py-6">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
           <BrandMark />
-          <p className="text-sm text-ink-muted">Chapter 3 · accounts</p>
+          <p className="text-sm text-ink-muted">Household vault</p>
         </div>
       </footer>
     </div>

@@ -4,10 +4,16 @@ import { authConfig } from "@/auth.config";
 
 const { auth } = NextAuth(authConfig);
 
-const appPrefixes = ["/dashboard", "/documents", "/family", "/settings"];
+const protectedPrefixes = [
+  "/dashboard",
+  "/documents",
+  "/family",
+  "/settings",
+  "/onboarding",
+];
 
-function isAppPath(pathname: string) {
-  return appPrefixes.some(
+function isProtectedPath(pathname: string) {
+  return protectedPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   );
 }
@@ -17,7 +23,7 @@ export const proxy = auth((request) => {
   const { pathname } = request.nextUrl;
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
-  if (isAppPath(pathname) && !isLoggedIn) {
+  if (isProtectedPath(pathname) && !isLoggedIn) {
     const login = new URL("/login", request.nextUrl);
     login.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(login);
@@ -25,6 +31,12 @@ export const proxy = auth((request) => {
 
   if (isAuthPage && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
+  }
+
+  if (pathname.startsWith("/invites/") && !isLoggedIn) {
+    const login = new URL("/login", request.nextUrl);
+    login.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(login);
   }
 
   return NextResponse.next();
@@ -37,6 +49,8 @@ export const config = {
     "/documents/:path*",
     "/family/:path*",
     "/settings/:path*",
+    "/onboarding",
+    "/invites/:path*",
     "/login",
     "/signup",
   ],
