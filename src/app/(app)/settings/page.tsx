@@ -26,7 +26,7 @@ export default async function SettingsPage() {
       </header>
 
       <Card>
-        <p className="text-sm font-medium text-terracotta">Signed in</p>
+        <p className="text-sm font-medium text-accent">Signed in</p>
         <CardTitle className="mt-2">
           {session.user.name ?? "Family member"}
         </CardTitle>

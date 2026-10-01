@@ -48,7 +48,7 @@ export function DueSoonList({
 
   if (documents.length === 0) {
     return (
-      <Card className="grid gap-4 text-center">
+      <Card className="surface-3d-strong grid gap-4 text-center">
         <p className="font-display text-xl font-semibold">
           Add the first 3 papers
         </p>
@@ -106,8 +106,17 @@ export function DueSoonList({
         </Card>
       ) : (
         <ul className="grid gap-3">
-          {visible.map((doc) => (
-            <DueSoonCard key={doc.id} document={doc} />
+          {visible.map((doc, index) => (
+            <DueSoonCard
+              key={doc.id}
+              document={doc}
+              className={cn(
+                "animate-rise",
+                index === 1 && "animate-rise-delay-1",
+                index === 2 && "animate-rise-delay-2",
+                index >= 3 && "animate-rise-delay-3",
+              )}
+            />
           ))}
         </ul>
       )}
@@ -115,29 +124,35 @@ export function DueSoonList({
   );
 }
 
-function DueSoonCard({ document }: { document: DueSoonItem }) {
+function DueSoonCard({
+  document,
+  className,
+}: {
+  document: DueSoonItem;
+  className?: string;
+}) {
   const expiry = new Date(document.expiryDate);
   const urgency = getUrgency(expiry);
   const rail = {
     safe: "border-l-olive",
     due30: "border-l-amber",
-    due7: "border-l-terracotta",
+    due7: "border-l-accent",
     expired: "border-l-crimson",
   }[urgency];
 
   return (
-    <li>
+    <li className={className}>
       <Link
         href={`/documents/${document.id}`}
         className={cn(
-          "block rounded-2xl border border-rule bg-paper-raised p-4 pl-5 shadow-[0_1px_0_rgba(28,25,20,0.04)]",
-          "border-l-4 transition-colors hover:border-ink/20",
+          "surface-3d pressable block rounded-[1.35rem] border-l-4 p-4 pl-5",
+          "hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]",
           rail,
         )}
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h3 className="font-display text-lg font-semibold">
+            <h3 className="font-display text-lg font-semibold tracking-tight">
               {document.title}
             </h3>
             <p className="mt-1 text-sm text-ink-muted">
@@ -146,7 +161,7 @@ function DueSoonCard({ document }: { document: DueSoonItem }) {
           </div>
           <StatusBadge urgency={urgency} />
         </div>
-        <p className="mt-4 text-base font-medium">
+        <p className="mt-4 text-base font-semibold tracking-tight">
           {formatRelativeExpiry(expiry)}
         </p>
         <p className="text-sm text-ink-muted">{formatLongDate(expiry)}</p>
@@ -170,14 +185,14 @@ function FilterField({
 }) {
   return (
     <div className="grid gap-2">
-      <label htmlFor={id} className="text-sm font-medium">
+      <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-12 rounded-xl border border-rule bg-paper-raised px-3 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+        className="min-h-12 rounded-2xl border border-rule bg-gradient-to-b from-white to-paper-raised px-3 text-base shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_16px_-14px_rgba(11,18,32,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

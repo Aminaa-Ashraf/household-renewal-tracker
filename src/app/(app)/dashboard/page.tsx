@@ -18,12 +18,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="grid gap-6">
-      <header className="flex flex-wrap items-start justify-between gap-4">
+      <header className="surface-3d flex flex-wrap items-start justify-between gap-4 rounded-[1.35rem] p-5">
         <div className="grid gap-2">
-          <p className="text-sm font-medium text-terracotta">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
             {membership.family.name}
           </p>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">
+          <h1 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
             Due soon
           </h1>
           <p className="text-ink-muted">

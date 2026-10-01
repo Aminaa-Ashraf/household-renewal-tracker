@@ -43,9 +43,9 @@ export default async function DocumentDetailPage({ params }: Params) {
 
   return (
     <div className="grid gap-6">
-      <header className="grid gap-2">
+      <header className="surface-3d grid gap-2 rounded-[1.35rem] p-5">
         <p className="text-sm text-ink-muted">
-          <Link href="/dashboard" className="underline">
+          <Link href="/dashboard" className="font-medium text-accent underline">
             Due soon
           </Link>{" "}
           / paper
@@ -60,7 +60,9 @@ export default async function DocumentDetailPage({ params }: Params) {
           {document.person.name ?? document.person.email} ·{" "}
           {documentTypeLabel(document.type)}
         </p>
-        <p className="text-lg font-medium">{formatRelativeExpiry(expiry)}</p>
+        <p className="text-lg font-semibold tracking-tight">
+          {formatRelativeExpiry(expiry)}
+        </p>
         <p className="text-sm text-ink-muted">{formatLongDate(expiry)}</p>
       </header>
 

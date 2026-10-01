@@ -108,7 +108,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 
       <p className="text-sm text-ink-muted">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-terracotta underline">
+        <Link href="/login" className="font-medium text-accent underline">
           Sign in
         </Link>
       </p>

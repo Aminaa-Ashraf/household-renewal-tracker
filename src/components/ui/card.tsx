@@ -8,7 +8,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-rule/80 bg-paper-raised p-5 shadow-[0_1px_0_rgba(28,25,20,0.04)]",
+        "surface-3d rounded-[1.35rem] p-5",
         className,
       )}
       {...props}
@@ -22,7 +22,10 @@ export function CardTitle({
 }: HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
-      className={cn("font-display text-xl font-semibold tracking-tight", className)}
+      className={cn(
+        "font-display text-xl font-semibold tracking-tight text-ink",
+        className,
+      )}
       {...props}
     />
   );

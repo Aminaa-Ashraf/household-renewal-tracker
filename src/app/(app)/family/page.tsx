@@ -48,7 +48,7 @@ export default async function FamilyPage() {
                 </p>
                 <p className="text-sm text-ink-muted">{member.user.email}</p>
               </div>
-              <p className="text-sm font-medium text-terracotta">
+              <p className="text-sm font-medium text-accent">
                 {roleLabel(member.role)}
               </p>
             </li>

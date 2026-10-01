@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 
 const variants = {
   primary:
-    "bg-terracotta text-paper-raised hover:bg-terracotta-deep focus-visible:outline-terracotta",
+    "bg-gradient-to-b from-accent-bright to-accent text-white shadow-[0_1px_0_rgba(255,255,255,0.4)_inset,0_12px_24px_-10px_var(--accent-glow),0_4px_0_var(--accent-deep)] hover:from-[#2dd4bf] hover:to-accent-deep focus-visible:outline-accent active:shadow-[0_2px_4px_rgba(11,18,32,0.25)_inset,0_1px_0_var(--accent-deep)]",
   secondary:
-    "bg-paper-raised text-ink border border-rule hover:border-ink/30 focus-visible:outline-ink",
+    "bg-gradient-to-b from-white to-paper-raised text-ink border border-rule shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_12px_22px_-12px_rgba(11,18,32,0.28),0_3px_0_rgba(11,18,32,0.08)] hover:border-rule-strong focus-visible:outline-ink",
   ghost:
-    "bg-transparent text-ink hover:bg-ink/5 focus-visible:outline-ink",
+    "bg-transparent text-ink hover:bg-ink/5 focus-visible:outline-ink shadow-none",
 } as const;
 
 const sizes = {
@@ -25,9 +25,10 @@ function buttonClassName(
   className?: string,
 ) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors",
+    "inline-flex items-center justify-center gap-2 rounded-2xl font-semibold tracking-tight",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
+    "pressable",
     variants[variant],
     sizes[size],
     className,

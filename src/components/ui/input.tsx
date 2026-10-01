@@ -21,7 +21,7 @@ export function Input({
 
   return (
     <div className="grid gap-2">
-      <label htmlFor={fieldId} className="text-sm font-medium text-ink">
+      <label htmlFor={fieldId} className="text-sm font-semibold text-ink">
         {label}
       </label>
       <input
@@ -29,9 +29,12 @@ export function Input({
         aria-invalid={Boolean(error)}
         aria-describedby={cn(hintId, errorId) || undefined}
         className={cn(
-          "min-h-12 w-full rounded-xl border bg-paper-raised px-4 text-base text-ink",
+          "min-h-12 w-full rounded-2xl border bg-gradient-to-b from-white to-paper-raised px-4 text-base text-ink",
           "placeholder:text-ink-muted/70",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta",
+          "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_16px_-14px_rgba(11,18,32,0.25)]",
+          "transition-[box-shadow,border-color,transform] duration-150",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+          "focus-visible:border-accent/40 focus-visible:-translate-y-px",
           error ? "border-crimson" : "border-rule",
           className,
         )}

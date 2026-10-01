@@ -133,7 +133,7 @@ export function LoginForm({
 
       <p className="text-sm text-ink-muted">
         New here?{" "}
-        <Link href="/signup" className="font-medium text-terracotta underline">
+        <Link href="/signup" className="font-medium text-accent underline">
           Create an account
         </Link>
       </p>

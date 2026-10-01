@@ -11,7 +11,7 @@ export function ComingSoon({
 }) {
   return (
     <Card>
-      <p className="text-sm font-medium uppercase tracking-wide text-terracotta">
+      <p className="text-sm font-medium uppercase tracking-wide text-accent">
         {chapter}
       </p>
       <CardTitle className="mt-2">{title}</CardTitle>

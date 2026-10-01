@@ -32,13 +32,17 @@ export function AppShell({
   const items = canAdd ? nav : nav.filter((item) => item.href !== "/documents/new");
 
   return (
-    <div className="min-h-dvh md:grid md:grid-cols-[240px_1fr]">
-      <aside className="hidden border-r border-rule bg-paper-raised/80 px-5 py-6 md:flex md:flex-col">
+    <div className="min-h-dvh md:grid md:grid-cols-[270px_1fr]">
+      <aside className="hidden border-r border-rule/70 bg-paper-raised/80 px-5 py-6 backdrop-blur-xl md:flex md:flex-col">
         <BrandMark />
-        <p className="mt-6 text-sm text-ink-muted">{userName ?? "Signed in"}</p>
-        <p className="text-xs text-ink-muted/80">
-          {familyName} · {roleLabel(role)}
-        </p>
+        <div className="surface-3d mt-6 rounded-2xl p-3.5">
+          <p className="text-sm font-semibold text-ink">
+            {userName ?? "Signed in"}
+          </p>
+          <p className="mt-1 text-xs text-ink-muted">
+            {familyName} · {roleLabel(role)}
+          </p>
+        </div>
         <nav aria-label="App" className="mt-8 grid gap-2">
           {items.map((item) => (
             <NavItem
@@ -51,20 +55,22 @@ export function AppShell({
       </aside>
 
       <div className="flex min-h-dvh flex-col pb-24 md:pb-0">
-        <header className="sticky top-0 z-10 border-b border-rule bg-paper/90 px-4 py-3 backdrop-blur md:hidden">
+        <header className="sticky top-0 z-10 border-b border-rule/70 bg-paper/80 px-4 py-3 backdrop-blur-xl md:hidden">
           <div className="flex items-center justify-between gap-3">
             <BrandMark />
-            <p className="text-right text-xs text-ink-muted">{familyName}</p>
+            <p className="text-right text-xs font-medium text-ink-muted">
+              {familyName}
+            </p>
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 md:px-8 md:py-8">
+        <main className="mx-auto w-full max-w-3xl flex-1 animate-rise px-4 py-6 md:px-8 md:py-8">
           {children}
         </main>
 
         <nav
           aria-label="App"
-          className="fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper-raised/95 px-2 py-2 backdrop-blur md:hidden"
+          className="fixed inset-x-0 bottom-0 z-10 border-t border-rule/70 bg-paper-raised/90 px-2 py-2 shadow-[0_-16px_36px_-24px_rgba(11,18,32,0.45)] backdrop-blur-xl md:hidden"
         >
           <ul
             className={cn(
@@ -112,10 +118,10 @@ function NavItem({
     <Link
       href={href}
       className={cn(
-        "flex min-h-12 items-center rounded-xl px-3 text-sm font-medium transition-colors",
+        "flex min-h-12 items-center rounded-2xl px-3 text-sm font-semibold transition-all duration-150",
         compact && "flex-col justify-center gap-1 px-1 text-xs",
         active
-          ? "bg-ink text-paper-raised"
+          ? "bg-gradient-to-b from-[#152338] to-ink text-white shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_12px_20px_-14px_rgba(11,18,32,0.75),0_2px_0_#020617]"
           : "text-ink-muted hover:bg-ink/5 hover:text-ink",
       )}
       aria-current={active ? "page" : undefined}
