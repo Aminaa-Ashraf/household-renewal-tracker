@@ -91,6 +91,15 @@ curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/remi
 3. Check the terminal for `[email:dev]` output (or your Resend inbox).
 4. Open the paper — the reminder log should show the window once.
 
+## Deploy (Vercel)
+
+1. Import the GitHub repo in Vercel (team: Aminahh).
+2. Add a hosted Postgres (Neon) and set `DATABASE_URL`.
+3. Set `AUTH_SECRET`, `AUTH_URL` (your Vercel URL), and `CRON_SECRET`.
+4. Optional: `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, Google OAuth.
+5. Deploy — `npm run build` runs `prisma migrate deploy` then `next build`.
+6. After first deploy: `npx prisma db seed` against the production `DATABASE_URL` if you want demo users.
+
 ## Scripts
 
 ```bash
@@ -98,6 +107,7 @@ npm run dev
 npm run build
 npm run start
 npm run db:migrate
+npm run db:deploy
 npm run db:studio
 npm run db:seed
 ```
