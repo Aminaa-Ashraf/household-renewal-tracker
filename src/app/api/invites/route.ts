@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { inviteSchema } from "@/lib/validations";
-import { acceptInvite, cancelInvite, createInvite } from "@/server/invites";
+import { cancelInvite, createInvite } from "@/server/invites";
 
 export async function POST(request: Request) {
   const session = await auth();

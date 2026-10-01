@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ export function DocumentActions({
   documentId: string;
   canEdit: boolean;
 }) {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState<"renew" | "delete">();
 
@@ -32,7 +34,7 @@ export function DocumentActions({
       setError(data?.error ?? "Could not mark as renewed.");
       return;
     }
-    window.location.reload();
+    router.refresh();
   }
 
   async function removePaper() {
@@ -52,7 +54,8 @@ export function DocumentActions({
       setError(data?.error ?? "Could not delete the paper.");
       return;
     }
-    window.location.assign("/dashboard");
+    router.push("/dashboard");
+    router.refresh();
   }
 
   return (

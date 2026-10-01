@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ export function LoginForm({
   googleEnabled: boolean;
   magicLinkEnabled: boolean;
 }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
   const [error, setError] = useState<string>();
@@ -40,7 +41,8 @@ export function LoginForm({
       return;
     }
 
-    window.location.assign(result?.url ?? callbackUrl);
+    router.push(callbackUrl);
+    router.refresh();
   }
 
   async function onGoogle() {

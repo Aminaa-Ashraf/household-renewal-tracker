@@ -21,7 +21,7 @@ import { requireSession } from "@/server/session";
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   return { title: "Paper details" };
 }
 

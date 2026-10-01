@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState<"password" | "google">();
 
@@ -50,7 +52,8 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
       return;
     }
 
-    window.location.assign(result?.url ?? "/onboarding");
+    router.push("/onboarding");
+    router.refresh();
   }
 
   async function onGoogle() {

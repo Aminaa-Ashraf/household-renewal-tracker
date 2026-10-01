@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ export function DocumentForm({
   initial?: Partial<DocumentFormValues>;
   documentId?: string;
 }) {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
   const [remind30, setRemind30] = useState(initial?.remind30 ?? true);
@@ -92,12 +94,14 @@ export function DocumentForm({
           uploadData?.error ??
             "Paper saved, but the file upload failed. Open the paper and try again.",
         );
-        window.location.assign(`/documents/${data.document.id}`);
+        router.push(`/documents/${data.document.id}`);
+        router.refresh();
         return;
       }
     }
 
-    window.location.assign(`/documents/${data.document.id}`);
+    router.push(`/documents/${data.document.id}`);
+    router.refresh();
   }
 
   return (

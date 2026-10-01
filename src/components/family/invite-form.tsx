@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function InviteForm() {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
@@ -31,7 +33,8 @@ export function InviteForm() {
       return;
     }
 
-    window.location.reload();
+    router.refresh();
+    setPending(false);
   }
 
   return (

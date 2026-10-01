@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function CreateFamilyForm() {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
@@ -30,7 +32,8 @@ export function CreateFamilyForm() {
       return;
     }
 
-    window.location.assign("/dashboard");
+    router.push("/dashboard");
+    router.refresh();
   }
 
   return (

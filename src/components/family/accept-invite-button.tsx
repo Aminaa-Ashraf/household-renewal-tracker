@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 
 export function AcceptInviteButton({ token }: { token: string }) {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
@@ -26,7 +28,8 @@ export function AcceptInviteButton({ token }: { token: string }) {
       return;
     }
 
-    window.location.assign("/dashboard");
+    router.push("/dashboard");
+    router.refresh();
   }
 
   return (

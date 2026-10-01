@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
 
 export function LeaveFamilyButton() {
+  const router = useRouter();
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
@@ -28,7 +30,8 @@ export function LeaveFamilyButton() {
       setError(data?.error ?? "Could not leave the household.");
       return;
     }
-    window.location.assign("/onboarding");
+    router.push("/onboarding");
+    router.refresh();
   }
 
   return (
