@@ -1,39 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #e8eef6;
-  --paper-deep: #d3dde9;
-  --paper-raised: #f8fafc;
-  --ink: #0b1220;
-  --ink-muted: #3d4b63;
-  --rule: #c2cfde;
-  --rule-strong: #8fa0b6;
-  --accent: #0f766e;
-  --accent-bright: #14b8a6;
-  --accent-deep: #115e59;
-  --accent-glow: rgba(20, 184, 166, 0.38);
+  --paper: #faf7f2;
+  --paper-deep: #efe8dc;
+  --paper-raised: #fffdf9;
+  --ink: #1c1917;
+  --ink-muted: #5c564e;
+  --rule: #e2d8c8;
+  --rule-strong: #c9bba6;
+  --accent: #1f5e4a;
+  --accent-bright: #2a7a60;
+  --accent-deep: #174736;
+  --accent-glow: rgba(31, 94, 74, 0.3);
   --terracotta: var(--accent);
   --terracotta-deep: var(--accent-deep);
   --terracotta-glow: var(--accent-glow);
-  --olive: #15803d;
-  --olive-soft: #dcfce7;
-  --amber: #b45309;
-  --amber-soft: #fef3c7;
-  --crimson: #b91c1c;
-  --crimson-soft: #fee2e2;
+  --olive: #1f5e4a;
+  --olive-soft: #e4f0ea;
+  --sage: #8db5a0;
+  --amber: #b8791a;
+  --amber-bright: #e8a33d;
+  --amber-soft: #fbe8c8;
+  --crimson: #d9534f;
+  --crimson-soft: #f8dada;
   --shadow-soft:
-    0 1px 0 rgba(255, 255, 255, 0.92) inset,
-    0 0 0 1px rgba(11, 18, 32, 0.04),
-    0 10px 18px -12px rgba(11, 18, 32, 0.22),
-    0 22px 40px -24px rgba(11, 18, 32, 0.28);
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 8px 20px -12px rgba(28, 25, 23, 0.18),
+    0 18px 36px -22px rgba(28, 25, 23, 0.16);
   --shadow-lift:
     0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 0 0 1px rgba(11, 18, 32, 0.05),
-    0 16px 28px -14px rgba(11, 18, 32, 0.28),
-    0 36px 64px -28px rgba(11, 18, 32, 0.38);
+    0 14px 28px -14px rgba(28, 25, 23, 0.2),
+    0 28px 48px -24px rgba(28, 25, 23, 0.18);
   --shadow-press:
-    0 2px 4px rgba(11, 18, 32, 0.2) inset,
-    0 1px 0 rgba(255, 255, 255, 0.35);
+    0 2px 4px rgba(28, 25, 23, 0.16) inset,
+    0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 @theme inline {
@@ -51,7 +51,9 @@
   --color-terracotta-deep: var(--terracotta-deep);
   --color-olive: var(--olive);
   --color-olive-soft: var(--olive-soft);
+  --color-sage: var(--sage);
   --color-amber: var(--amber);
+  --color-amber-bright: var(--amber-bright);
   --color-amber-soft: var(--amber-soft);
   --color-crimson: var(--crimson);
   --color-crimson-soft: var(--crimson-soft);
@@ -67,10 +69,10 @@ html {
 
 body {
   background:
-    radial-gradient(980px 520px at 12% -12%, rgba(20, 184, 166, 0.18), transparent 55%),
-    radial-gradient(820px 460px at 100% 0%, rgba(37, 99, 235, 0.14), transparent 52%),
-    radial-gradient(640px 420px at 70% 110%, rgba(15, 118, 110, 0.1), transparent 55%),
-    linear-gradient(165deg, #f4f7fb 0%, var(--paper) 45%, #d9e3ef 100%);
+    radial-gradient(900px 480px at 8% -10%, rgba(232, 163, 61, 0.12), transparent 55%),
+    radial-gradient(780px 420px at 100% 0%, rgba(141, 181, 160, 0.16), transparent 50%),
+    radial-gradient(640px 400px at 60% 100%, rgba(31, 94, 74, 0.08), transparent 55%),
+    linear-gradient(165deg, #fffdf9 0%, var(--paper) 48%, #f3ebe0 100%);
   color: var(--ink);
   font-family: var(--font-sans);
   min-height: 100dvh;
@@ -82,8 +84,8 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: 0;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 body > * {
@@ -92,14 +94,14 @@ body > * {
 }
 
 ::selection {
-  background: #cbfbf1;
+  background: #dceee5;
   color: var(--ink);
 }
 
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(22px) scale(0.97);
+    transform: translateY(18px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -113,21 +115,12 @@ body > * {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes sheen {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
+    transform: translateY(-7px);
   }
 }
 
 .animate-rise {
-  animation: rise-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-rise-delay-1 {
@@ -143,29 +136,34 @@ body > * {
 }
 
 .animate-float {
-  animation: float-soft 7.5s ease-in-out infinite;
-  transform-style: preserve-3d;
-}
-
-.scene-3d {
-  perspective: 1400px;
-  perspective-origin: 50% 40%;
+  animation: float-soft 7s ease-in-out infinite;
 }
 
 .surface-3d {
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.85), transparent 42%),
-    linear-gradient(180deg, var(--paper-raised), #eef3f9);
-  border: 1px solid color-mix(in srgb, var(--rule) 70%, white);
+    linear-gradient(165deg, rgba(255, 255, 255, 0.78), transparent 45%),
+    var(--paper-raised);
+  border: 1px solid color-mix(in srgb, var(--rule) 75%, white);
   box-shadow: var(--shadow-soft);
+  border-radius: 22px;
 }
 
 .surface-3d-strong {
   background:
-    linear-gradient(150deg, rgba(255, 255, 255, 0.95), transparent 40%),
-    linear-gradient(180deg, #ffffff, var(--paper-raised));
-  border: 1px solid color-mix(in srgb, var(--rule) 55%, white);
+    linear-gradient(150deg, rgba(255, 255, 255, 0.92), transparent 42%),
+    #ffffff;
+  border: 1px solid color-mix(in srgb, var(--rule) 60%, white);
   box-shadow: var(--shadow-lift);
+  border-radius: 22px;
+}
+
+.paper-card {
+  border-radius: 22px;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.95), transparent 40%),
+    #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--rule) 70%, white);
+  box-shadow: var(--shadow-soft);
 }
 
 .pressable {
@@ -173,19 +171,23 @@ body > * {
     transform 160ms ease,
     box-shadow 160ms ease,
     background-color 160ms ease,
-    border-color 160ms ease,
-    filter 160ms ease;
+    border-color 160ms ease;
 }
 
 .pressable:hover {
-  transform: translateY(-3px);
-  filter: brightness(1.02);
+  transform: translateY(-2px);
 }
 
 .pressable:active {
   transform: translateY(1px);
   box-shadow: var(--shadow-press);
-  filter: none;
+}
+
+.squiggle {
+  display: block;
+  width: 7.5rem;
+  height: 0.7rem;
+  margin-top: 0.15rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -202,6 +204,5 @@ body > * {
   .pressable:hover,
   .pressable:active {
     transform: none;
-    filter: none;
   }
 }

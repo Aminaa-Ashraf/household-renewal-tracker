@@ -1,18 +1,26 @@
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export function BrandMark({
   className,
   href = "/",
+  tone = "default",
 }: {
   className?: string;
   href?: string | false;
+  tone?: "default" | "inverse";
 }) {
+  const inverse = tone === "inverse";
   const mark = (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <span
         aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-xl bg-ink text-white shadow-sm"
+        className={cn(
+          "grid size-9 shrink-0 place-items-center rounded-[14px]",
+          inverse
+            ? "bg-white/15 text-white ring-1 ring-white/25"
+            : "bg-accent text-white shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_6px_14px_-8px_rgba(31,94,74,0.55)]",
+        )}
       >
         <svg viewBox="0 0 24 24" className="size-5" fill="none">
           <path
@@ -29,7 +37,12 @@ export function BrandMark({
           />
         </svg>
       </span>
-      <span className="font-display text-[0.98rem] font-semibold leading-none tracking-tight text-ink sm:text-[1.05rem]">
+      <span
+        className={cn(
+          "font-display text-[0.98rem] font-semibold leading-none tracking-tight sm:text-[1.05rem]",
+          inverse ? "text-white" : "text-ink",
+        )}
+      >
         Household Renewal Tracker
       </span>
     </span>
@@ -40,7 +53,13 @@ export function BrandMark({
   }
 
   return (
-    <Link href={href} className="inline-flex rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+        inverse ? "focus-visible:outline-white" : "focus-visible:outline-accent",
+      )}
+    >
       {mark}
     </Link>
   );

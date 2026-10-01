@@ -2,12 +2,12 @@ import { urgencyLabel, type Urgency } from "@/lib/document-status";
 import { cn } from "@/lib/utils";
 
 const styles: Record<Urgency, string> = {
-  safe: "bg-olive-soft text-olive shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_4px_10px_-6px_rgba(21,128,61,0.35)]",
+  safe: "bg-olive-soft text-accent shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]",
   due30:
-    "bg-amber-soft text-amber shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_4px_10px_-6px_rgba(180,83,9,0.3)]",
-  due7: "bg-teal-50 text-accent-deep shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_4px_10px_-6px_rgba(15,118,110,0.35)]",
+    "bg-amber-soft text-amber shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]",
+  due7: "bg-amber-soft text-amber shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]",
   expired:
-    "bg-crimson-soft text-crimson shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_4px_10px_-6px_rgba(185,28,28,0.3)]",
+    "bg-crimson-soft text-crimson shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]",
 };
 
 export function StatusBadge({ urgency }: { urgency: Urgency }) {

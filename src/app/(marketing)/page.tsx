@@ -1,143 +1,581 @@
-import { BrandMark } from "@/components/brand-mark";
+import type { ReactNode } from "react";
+import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { ButtonLink } from "@/components/ui/button";
-import { StatusBadge } from "@/components/ui/badge";
-import { formatLongDate, formatRelativeExpiry } from "@/lib/dates";
-import { getUrgency } from "@/lib/document-status";
-import { PREVIEW_DOCUMENTS } from "@/lib/preview-data";
+import { cn } from "@/lib/utils";
 
 export default function HomePage() {
-  const sample = PREVIEW_DOCUMENTS[0];
-
   return (
     <div className="min-h-dvh overflow-x-hidden">
       <SiteHeader />
 
       <main>
-        <section className="relative isolate overflow-hidden border-b border-rule/40">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(20,184,166,0.2),transparent_38%),radial-gradient(circle_at_88%_12%,rgba(37,99,235,0.14),transparent_36%)]"
-          />
-
-          <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12 md:py-16 lg:py-20">
+        {/* Hero */}
+        <section className="relative isolate overflow-hidden">
+          <div className="relative mx-auto grid max-w-6xl gap-12 px-4 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-10 md:py-16 lg:py-20">
             <div className="grid gap-6 animate-rise">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">
-                Family paper vault
+                For Pakistani families
               </p>
-              <h1 className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-ink md:text-5xl lg:text-6xl">
-                Know what is expiring before it becomes a scramble.
+              <h1 className="font-display text-4xl leading-[1.08] font-semibold tracking-tight text-ink md:text-5xl lg:text-[3.4rem]">
+                Know what is expiring before it becomes a{" "}
+                <span className="relative inline-block">
+                  scramble
+                  <svg
+                    aria-hidden
+                    className="squiggle absolute left-0 top-full text-amber-bright"
+                    viewBox="0 0 120 12"
+                    fill="none"
+                  >
+                    <path
+                      d="M2 8c18-6 28 4 46-2s28 5 44-1 18-3 26 1"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+                .
               </h1>
               <p className="max-w-xl text-lg leading-relaxed text-ink-muted">
-                One shared vault for your household&apos;s CNIC, passport,
-                vehicle, and insurance dates — with clear owners and calm next
-                steps.
+                One shared place for Ammi&apos;s CNIC, Abbu&apos;s passport, the
+                car&apos;s token tax and your insurance — so nobody finds out at
+                the counter.
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/signup" size="lg">
-                  Create a free account
+              <div className="flex flex-col items-stretch gap-3 sm:items-start">
+                <ButtonLink
+                  href="/signup"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Start your family vault (free)
                 </ButtonLink>
-                <ButtonLink href="/login" variant="secondary" size="lg">
-                  Sign in
-                </ButtonLink>
+                <Link
+                  href="/login"
+                  className="text-center text-base font-medium text-ink-muted underline decoration-rule-strong underline-offset-4 transition-colors hover:text-ink sm:text-left"
+                >
+                  I already have an account
+                </Link>
               </div>
             </div>
 
-            <div
-              aria-label="Example paper"
-              className="relative mx-auto w-full max-w-md animate-rise animate-rise-delay-1"
-            >
-              <article className="surface-3d-strong relative animate-float rounded-[1.5rem] border-l-4 border-l-accent p-6">
-                <div className="flex items-start justify-between gap-3">
+            <div className="relative mx-auto w-full max-w-md animate-rise animate-rise-delay-1">
+              <div className="paper-card overflow-hidden p-2 shadow-[var(--shadow-lift)]">
+                <div className="flex items-center justify-between px-3 py-3">
                   <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
-                      Example
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                      Due soon
                     </p>
-                    <h2 className="mt-2 font-display text-2xl font-semibold">
-                      {sample.title}
-                    </h2>
+                    <p className="mt-1 text-sm text-ink-muted">
+                      Khan household · next 30 days
+                    </p>
                   </div>
-                  <StatusBadge urgency={getUrgency(sample.expiryDate)} />
+                  <span className="rounded-full bg-amber-soft px-2.5 py-1 text-xs font-semibold text-amber">
+                    2 need attention
+                  </span>
                 </div>
-                <p className="mt-6 text-xl font-semibold tracking-tight">
-                  {formatRelativeExpiry(sample.expiryDate)}
-                </p>
-                <p className="mt-1 text-ink-muted">
-                  {formatLongDate(sample.expiryDate)}
-                </p>
-                <div className="mt-6 flex items-center justify-between border-t border-rule/70 pt-4 text-sm font-medium text-ink-muted">
-                  <span>Papa · Passport</span>
-                  <span>Open</span>
-                </div>
-              </article>
+
+                <ul className="grid gap-2 p-1">
+                  <HeroRow
+                    avatar={{ initial: "A", tone: "bg-[#dceee5] text-accent" }}
+                    title="Abbu's passport"
+                    meta="expires in 18 days · 19 Oct 2026"
+                    badge={{ label: "Due soon", tone: "amber" }}
+                  />
+                  <HeroRow
+                    avatar={{ initial: "A", tone: "bg-crimson-soft text-crimson" }}
+                    title="Ammi's CNIC"
+                    meta="expired 4 days ago · 27 Sept 2026"
+                    badge={{ label: "Expired", tone: "red" }}
+                  />
+                  <HeroRow
+                    avatar={{ initial: "C", tone: "bg-amber-soft text-amber" }}
+                    title="Car token tax (LEA-1234)"
+                    meta="safe until Mar 2027"
+                    badge={{ label: "All good", tone: "green" }}
+                  />
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
+        {/* How it works */}
         <section
           id="how-it-works"
-          className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3 md:gap-8 md:py-20"
+          className="mx-auto max-w-6xl px-4 py-14 md:py-20"
         >
-          {[
-            {
-              n: "01",
-              title: "Due soon",
-              text: "Open the app and see the next 30 days, sorted by expiry.",
-              delay: "animate-rise-delay-1",
-            },
-            {
-              n: "02",
-              title: "Whose paper",
-              text: "Each document belongs to a family member. No guessing.",
-              delay: "animate-rise-delay-2",
-            },
-            {
-              n: "03",
-              title: "What to do",
-              text: "Renew it, mark it done, or leave it. Reminders come later.",
-              delay: "animate-rise-delay-3",
-            },
-          ].map((item) => (
-            <div
-              key={item.n}
-              className={`animate-rise ${item.delay} grid gap-3 border-t border-rule/80 pt-5`}
+          <div className="mb-10 max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
+              How it works
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
+              Three calm steps. No scramble.
+            </h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <StepCard
+              title="See what's next"
+              text="Open the app and see the next papers, sorted by date."
             >
-              <p className="font-display text-sm font-semibold tracking-[0.16em] text-accent">
-                {item.n}
-              </p>
-              <h2 className="font-display text-2xl font-semibold tracking-tight">
-                {item.title}
-              </h2>
-              <p className="text-ink-muted">{item.text}</p>
-            </div>
-          ))}
+              <div className="grid gap-2">
+                {[
+                  { title: "Ammi's CNIC", when: "7 days", tone: "text-crimson" },
+                  {
+                    title: "Abbu's passport",
+                    when: "18 days",
+                    tone: "text-amber",
+                  },
+                  {
+                    title: "Car token tax",
+                    when: "Mar 2027",
+                    tone: "text-accent",
+                  },
+                ].map((row) => (
+                  <div
+                    key={row.title}
+                    className="flex items-center justify-between rounded-2xl bg-paper px-3 py-2.5 text-sm"
+                  >
+                    <span className="font-medium text-ink">{row.title}</span>
+                    <span className={cn("font-semibold", row.tone)}>
+                      {row.when}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </StepCard>
+
+            <StepCard
+              title="Every paper has an owner"
+              text="Each document belongs to someone at home. No guessing."
+            >
+              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {[
+                  { name: "Ammi", tone: "bg-crimson-soft text-crimson" },
+                  { name: "Abbu", tone: "bg-[#dceee5] text-accent" },
+                  { name: "Bhai", tone: "bg-amber-soft text-amber" },
+                  { name: "Sana", tone: "bg-[#e8e4f4] text-[#5b4d8a]" },
+                ].map((person) => (
+                  <span
+                    key={person.name}
+                    className="inline-flex shrink-0 items-center gap-2 rounded-full border border-rule/70 bg-paper-raised px-2.5 py-1.5 text-sm font-medium"
+                  >
+                    <span
+                      className={cn(
+                        "grid size-7 place-items-center rounded-full text-xs font-bold",
+                        person.tone,
+                      )}
+                    >
+                      {person.name[0]}
+                    </span>
+                    {person.name}
+                  </span>
+                ))}
+              </div>
+            </StepCard>
+
+            <StepCard
+              title="Decide in one tap"
+              text="Renew it, leave a reminder, or mark it done."
+            >
+              <div className="flex flex-wrap gap-2">
+                {["Renewed", "Remind me later", "Not needed"].map((label) => (
+                  <span
+                    key={label}
+                    className="rounded-full border border-rule bg-paper-raised px-3 py-2 text-sm font-semibold text-ink shadow-sm"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </StepCard>
+          </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 pb-16">
-          <div className="surface-3d-strong rounded-[1.5rem] p-6 md:p-8">
-            <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
-              Add the first 3 papers
-            </h2>
-            <p className="mt-3 max-w-2xl text-ink-muted">
-              Start with the ones that hurt when they expire: a CNIC, a
-              passport, and one vehicle or insurance paper. Sign in first, then
-              invite the household.
-            </p>
-            <div className="mt-6">
-              <ButtonLink href="/signup">Get started</ButtonLink>
+        {/* Relatable moment */}
+        <section className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
+          <div className="paper-card relative overflow-hidden px-6 py-10 md:px-12 md:py-14">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-amber-bright/15 blur-2xl"
+            />
+            <blockquote className="relative mx-auto max-w-3xl text-center">
+              <p className="font-display text-2xl leading-snug font-semibold tracking-tight text-ink md:text-3xl md:leading-snug">
+                “We only noticed Abbu&apos;s passport had expired two weeks
+                before Umrah.”
+              </p>
+              <p className="mt-5 text-base text-ink-muted md:text-lg">
+                This app exists so that never happens to your family.
+              </p>
+            </blockquote>
+          </div>
+        </section>
+
+        {/* Reminders — email only (WhatsApp/SMS not supported yet) */}
+        <section id="reminders" className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
+          <div className="grid items-center gap-8 md:grid-cols-[1fr_1.05fr] md:gap-12">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
+                Reminders
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
+                A gentle nudge before the counter.
+              </h2>
+              <p className="mt-4 max-w-md text-ink-muted">
+                We email you at 30, 7, and 1 day before expiry — and on the day
+                itself — so Ammi&apos;s CNIC doesn&apos;t sneak up on you.
+              </p>
             </div>
+
+            <div className="paper-card mx-auto w-full max-w-md p-5">
+              <div className="mb-3 flex items-center gap-2 text-sm font-medium text-ink-muted">
+                <span className="grid size-8 place-items-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
+                  <ChatIcon />
+                </span>
+                Reminder preview
+              </div>
+              <div className="rounded-[20px] rounded-bl-md bg-[#dcf8c6] px-4 py-3 text-[15px] leading-relaxed text-ink shadow-sm">
+                Reminder: Ammi&apos;s CNIC expires in 7 days. Tap to see what to
+                bring to NADRA.
+                <span className="mt-2 block text-right text-xs text-ink-muted">
+                  via email · 9:00 am
+                </span>
+              </div>
+              <p className="mt-4 text-sm text-ink-muted">
+                Reminders come by email today. WhatsApp and SMS can come later.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust & privacy */}
+        <section id="privacy" className="mx-auto max-w-6xl px-4 pb-14 md:pb-20">
+          <div className="mb-8 max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">
+              Trust & privacy
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
+              Family papers stay in the family.
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                title: "Your documents are encrypted",
+                text: "Files are stored privately and only opened by people in your household vault.",
+                icon: LockIcon,
+              },
+              {
+                title: "Only family you invite",
+                text: "Nobody sees a paper unless you invite them. Viewers and members stay in your control.",
+                icon: PeopleIcon,
+              },
+              {
+                title: "We never sell your data",
+                text: "No ads. No data brokers. Your CNIC and passport dates are not a product.",
+                icon: ShieldIcon,
+              },
+            ].map((item) => (
+              <div key={item.title} className="paper-card grid gap-3 p-5">
+                <span className="grid size-11 place-items-center rounded-2xl bg-olive-soft text-accent">
+                  <item.icon />
+                </span>
+                <h3 className="font-display text-xl font-semibold tracking-tight">
+                  {item.title}
+                </h3>
+                <p className="text-ink-muted">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* First 3 papers */}
+        <section className="mx-auto max-w-6xl px-4 pb-16">
+          <div className="paper-card grid gap-8 p-6 md:grid-cols-[1.1fr_0.9fr] md:items-center md:p-8">
+            <div>
+              <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+                Add the first 3 papers
+              </h2>
+              <p className="mt-3 max-w-xl text-ink-muted">
+                Start with the ones that hurt when they expire. Sign in, add
+                them, then invite Abbu, Ammi, or Bhai.
+              </p>
+              <div className="mt-6">
+                <ButtonLink href="/signup">Add my first paper</ButtonLink>
+              </div>
+            </div>
+
+            <ul className="grid gap-3">
+              {[
+                { label: "A CNIC", icon: IdIcon },
+                { label: "A passport", icon: PassportIcon },
+                { label: "A vehicle or insurance paper", icon: CarIcon },
+              ].map((item) => (
+                <li
+                  key={item.label}
+                  className="flex items-center gap-3 rounded-[18px] border border-rule/80 bg-paper px-4 py-3"
+                >
+                  <span
+                    aria-hidden
+                    className="grid size-6 place-items-center rounded-md border-2 border-rule-strong bg-paper-raised"
+                  />
+                  <span className="grid size-9 place-items-center rounded-xl bg-olive-soft text-accent">
+                    <item.icon />
+                  </span>
+                  <span className="font-medium text-ink">{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* FAQ for footer link */}
+        <section id="faq" className="mx-auto max-w-6xl px-4 pb-16">
+          <h2 className="font-display text-2xl font-semibold tracking-tight">
+            Quick answers
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                q: "Is it only for one household?",
+                a: "Yes. One family vault, shared with the people you invite.",
+              },
+              {
+                q: "Do I need to upload files?",
+                a: "Dates work on their own. Attach a scan when you want it handy.",
+              },
+              {
+                q: "How do reminders arrive?",
+                a: "By email for now — ahead of expiry, so you have time for NADRA or the embassy.",
+              },
+            ].map((item) => (
+              <div key={item.q} className="border-t border-rule pt-4">
+                <h3 className="font-semibold text-ink">{item.q}</h3>
+                <p className="mt-2 text-sm text-ink-muted">{item.a}</p>
+              </div>
+            ))}
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-rule/70 bg-paper-raised/60 px-4 py-6 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-          <BrandMark />
-          <p className="text-sm font-medium text-ink-muted">
-            Shared household vault
-          </p>
+      <footer className="bg-accent-deep px-4 py-10 text-white">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-sm">
+            <p className="font-display text-lg font-semibold tracking-tight">
+              Household Renewal Tracker
+            </p>
+            <p className="mt-2 text-sm text-white/70">
+              Made for families in Pakistan.
+            </p>
+          </div>
+          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
+            <Link href="/#privacy" className="text-white/70 hover:text-white">
+              Privacy
+            </Link>
+            <a
+              href="mailto:hello@householdrenewal.tracker"
+              className="text-white/70 hover:text-white"
+            >
+              Contact
+            </a>
+            <Link href="/#faq" className="text-white/70 hover:text-white">
+              FAQ
+            </Link>
+          </nav>
         </div>
       </footer>
     </div>
+  );
+}
+
+function HeroRow({
+  avatar,
+  title,
+  meta,
+  badge,
+}: {
+  avatar: { initial: string; tone: string };
+  title: string;
+  meta: string;
+  badge: { label: string; tone: "amber" | "red" | "green" };
+}) {
+  const badgeTone = {
+    amber: "bg-amber-soft text-amber",
+    red: "bg-crimson-soft text-crimson",
+    green: "bg-olive-soft text-accent",
+  }[badge.tone];
+
+  return (
+    <li className="flex items-start justify-between gap-3 rounded-[18px] border border-rule/60 bg-paper px-3 py-3">
+      <div className="flex items-start gap-3">
+        <span
+          className={cn(
+            "mt-0.5 grid size-9 shrink-0 place-items-center rounded-full text-sm font-bold",
+            avatar.tone,
+          )}
+        >
+          {avatar.initial}
+        </span>
+        <div>
+          <p className="font-display font-semibold tracking-tight text-ink">
+            {title}
+          </p>
+          <p className="mt-0.5 text-sm text-ink-muted">{meta}</p>
+        </div>
+      </div>
+      <span
+        className={cn(
+          "inline-flex shrink-0 rounded-xl px-2.5 py-1 text-xs font-semibold",
+          badgeTone,
+        )}
+      >
+        {badge.label}
+      </span>
+    </li>
+  );
+}
+
+function StepCard({
+  title,
+  text,
+  children,
+}: {
+  title: string;
+  text: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="paper-card flex flex-col gap-4 p-5">
+      <div>
+        <h3 className="font-display text-xl font-semibold tracking-tight">
+          {title}
+        </h3>
+        <p className="mt-2 text-sm text-ink-muted">{text}</p>
+      </div>
+      <div className="mt-auto">{children}</div>
+    </div>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden>
+      <path d="M12 3c-4.8 0-8.5 3.2-8.5 7.2 0 2.4 1.3 4.5 3.4 5.8l-.7 3.2 3.4-1.8c.7.2 1.5.3 2.4.3 4.8 0 8.5-3.2 8.5-7.2S16.8 3 12 3Z" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
+      <rect
+        x="5"
+        y="10"
+        width="14"
+        height="10"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <path
+        d="M8 10V8a4 4 0 0 1 8 0v2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
+      <circle cx="9" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.7" />
+      <circle cx="16" cy="9" r="2" stroke="currentColor" strokeWidth="1.7" />
+      <path
+        d="M4.5 17.5c.5-2.2 2.3-3.5 4.5-3.5s4 1.3 4.5 3.5M13 17.5c.3-1.5 1.5-2.5 3-2.5s2.7 1 3 2.5"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
+      <path
+        d="M12 3.5 19 6.5v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9v-5l7-3Z"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IdIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" fill="none" aria-hidden>
+      <rect
+        x="3"
+        y="6"
+        width="18"
+        height="12"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <circle cx="8.5" cy="12" r="2" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M13 10.5h5M13 13.5h3.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function PassportIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" fill="none" aria-hidden>
+      <rect
+        x="5"
+        y="3.5"
+        width="14"
+        height="17"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M8.5 16h7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function CarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" fill="none" aria-hidden>
+      <path
+        d="M4 14.5h16l-1.2-4.2A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.3L4 14.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 14.5h14v3.5a1 1 0 0 1-1 1h-1.5a1.5 1.5 0 0 1-1.5-1.5H9A1.5 1.5 0 0 1 7.5 19H6a1 1 0 0 1-1-1v-3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
