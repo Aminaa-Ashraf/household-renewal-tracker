@@ -34,7 +34,15 @@ export type DocumentInput = {
 };
 
 const documentInclude = {
-  person: { select: { id: true, name: true, email: true } },
+  person: {
+    select: {
+      id: true,
+      name: true,
+      relation: true,
+      avatarColor: true,
+      linkedUserId: true,
+    },
+  },
   createdBy: { select: { id: true, name: true, email: true } },
   updatedBy: { select: { id: true, name: true, email: true } },
   renewedBy: { select: { id: true, name: true, email: true } },
@@ -81,11 +89,10 @@ export async function createDocument(userId: string, input: DocumentInput) {
     throw new Error("FORBIDDEN");
   }
 
-  const person = await db.membership.findFirst({
+  const person = await db.familyProfile.findFirst({
     where: {
       familyId: membership.familyId,
-      userId: input.personId,
-      status: "ACTIVE",
+      id: input.personId,
     },
   });
 
@@ -120,16 +127,21 @@ export async function updateDocument(
 ) {
   const { document, membership } = await getDocumentForUser(userId, documentId);
 
-  if (!canEditDocument(membership.role, userId, document)) {
+  if (
+    !canEditDocument(membership.role, userId, {
+      personId: document.person.linkedUserId ?? document.personId,
+      createdById: document.createdById,
+      linkedUserId: document.person.linkedUserId,
+    })
+  ) {
     throw new Error("FORBIDDEN");
   }
 
   if (input.personId) {
-    const person = await db.membership.findFirst({
+    const person = await db.familyProfile.findFirst({
       where: {
         familyId: membership.familyId,
-        userId: input.personId,
-        status: "ACTIVE",
+        id: input.personId,
       },
     });
     if (!person) throw new Error("INVALID_PERSON");
@@ -173,7 +185,13 @@ export async function updateDocument(
 export async function softDeleteDocument(userId: string, documentId: string) {
   const { document, membership } = await getDocumentForUser(userId, documentId);
 
-  if (!canEditDocument(membership.role, userId, document)) {
+  if (
+    !canEditDocument(membership.role, userId, {
+      personId: document.person.linkedUserId ?? document.personId,
+      createdById: document.createdById,
+      linkedUserId: document.person.linkedUserId,
+    })
+  ) {
     throw new Error("FORBIDDEN");
   }
 
@@ -192,6 +210,14 @@ export async function listActiveFamilyMembers(familyId: string) {
     include: {
       user: { select: { id: true, name: true, email: true } },
     },
+    orderBy: { createdAt: "asc" },
+  });
+}
+
+export async function listFamilyProfilesForDocs(familyId: string) {
+  return db.familyProfile.findMany({
+    where: { familyId },
+    select: { id: true, name: true, relation: true, avatarColor: true },
     orderBy: { createdAt: "asc" },
   });
 }

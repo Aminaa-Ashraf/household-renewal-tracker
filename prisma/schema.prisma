@@ -18,6 +18,15 @@ enum MembershipStatus {
   LEFT
 }
 
+enum FamilyRelation {
+  FATHER
+  MOTHER
+  SON
+  DAUGHTER
+  SPOUSE
+  OTHER
+}
+
 enum DocumentType {
   CNIC
   PASSPORT
@@ -36,31 +45,36 @@ enum DocumentStatus {
 }
 
 enum ReminderWindow {
+  DAYS_90
+  DAYS_60
   DAYS_30
+  DAYS_14
   DAYS_7
   DAYS_1
   EXPIRY
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                   String    @id @default(cuid())
+  name                 String?
+  email                String    @unique
+  emailVerified        DateTime?
+  image                String?
+  passwordHash         String?
+  sessionsInvalidBefore DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
-  accounts  Account[]
-  sessions  Session[]
-  memberships Membership[]
-  invitesSent Invite[] @relation("InvitesSent")
-
-  documentsOwned   Document[] @relation("DocumentPerson")
-  documentsCreated Document[] @relation("DocumentCreatedBy")
-  documentsUpdated Document[] @relation("DocumentUpdatedBy")
-  documentsRenewed Document[] @relation("DocumentRenewedBy")
+  accounts            Account[]
+  sessions            Session[]
+  memberships         Membership[]
+  invitesSent         Invite[]          @relation("InvitesSent")
+  linkedProfiles      FamilyProfile[]   @relation("ProfileLinkedUser")
+  documentsCreated    Document[]        @relation("DocumentCreatedBy")
+  documentsUpdated    Document[]        @relation("DocumentUpdatedBy")
+  documentsRenewed    Document[]        @relation("DocumentRenewedBy")
+  reminderPreference  ReminderPreference?
+  userPreference      UserPreference?
 }
 
 model Account {
@@ -107,6 +121,7 @@ model Family {
   memberships Membership[]
   documents   Document[]
   invites     Invite[]
+  profiles    FamilyProfile[]
 }
 
 model Membership {
@@ -123,6 +138,24 @@ model Membership {
 
   @@unique([userId, familyId])
   @@index([familyId, status])
+}
+
+model FamilyProfile {
+  id           String         @id @default(cuid())
+  familyId     String
+  name         String
+  relation     FamilyRelation @default(OTHER)
+  avatarColor  String         @default("#1F5E4A")
+  linkedUserId String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  family     Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  linkedUser User?      @relation("ProfileLinkedUser", fields: [linkedUserId], references: [id], onDelete: SetNull)
+  documents  Document[]
+
+  @@index([familyId])
+  @@index([linkedUserId])
 }
 
 model Document {
@@ -146,7 +179,7 @@ model Document {
   updatedAt   DateTime       @updatedAt
 
   family    Family        @relation(fields: [familyId], references: [id], onDelete: Cascade)
-  person    User          @relation("DocumentPerson", fields: [personId], references: [id])
+  person    FamilyProfile @relation(fields: [personId], references: [id])
   createdBy User          @relation("DocumentCreatedBy", fields: [createdById], references: [id])
   updatedBy User?         @relation("DocumentUpdatedBy", fields: [updatedById], references: [id])
   renewedBy User?         @relation("DocumentRenewedBy", fields: [renewedById], references: [id])
@@ -179,6 +212,7 @@ model Invite {
   invitedById String
   expiresAt   DateTime
   acceptedAt  DateTime?
+  revokedAt   DateTime?
   createdAt   DateTime  @default(now())
 
   family    Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
@@ -197,4 +231,30 @@ model ReminderLog {
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@unique([documentId, window, expiryDate])
+}
+
+model ReminderPreference {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  emailEnabled     Boolean  @default(true)
+  windows          Int[]    @default([30, 7, 1, 0])
+  weeklyDigest     Boolean  @default(false)
+  weeklyDigestDay  Int      @default(1)
+  timezone         String   @default("Asia/Karachi")
+  quietHoursStart  Int?
+  quietHoursEnd    Int?
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPreference {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  language   String   @default("en")
+  dateFormat String   @default("long")
+  theme      String   @default("system")
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

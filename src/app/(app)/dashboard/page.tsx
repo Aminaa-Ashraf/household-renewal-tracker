@@ -43,7 +43,7 @@ export default async function DashboardPage() {
           id: doc.id,
           title: doc.title,
           type: doc.type,
-          person: doc.person.name ?? doc.person.email ?? "Family member",
+          person: doc.person.name,
           personId: doc.personId,
           expiryDate: doc.expiryDate.toISOString(),
         }))}

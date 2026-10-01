@@ -50,7 +50,7 @@ export async function createInvite(
     },
   });
 
-  const acceptUrl = `${process.env.AUTH_URL ?? "http://localhost:3000"}/invites/${invite.token}`;
+  const acceptUrl = inviteUrl(invite.token);
   await sendInviteEmail({
     to: invite.email,
     familyName: invite.family.name,
@@ -59,7 +59,11 @@ export async function createInvite(
     role: invite.role,
   });
 
-  return invite;
+  return { ...invite, acceptUrl };
+}
+
+export function inviteUrl(token: string) {
+  return `${process.env.AUTH_URL ?? "http://localhost:3000"}/invites/${token}`;
 }
 
 export async function getInviteByToken(token: string) {
@@ -76,6 +80,7 @@ export async function acceptInvite(userId: string, token: string) {
   const invite = await getInviteByToken(token);
   if (!invite) throw new Error("NOT_FOUND");
   if (invite.acceptedAt) throw new Error("ALREADY_ACCEPTED");
+  if (invite.revokedAt) throw new Error("REVOKED");
   if (invite.expiresAt < new Date()) throw new Error("EXPIRED");
 
   const user = await db.user.findUnique({ where: { id: userId } });
@@ -102,23 +107,38 @@ export async function acceptInvite(userId: string, token: string) {
       },
     });
 
-    if (previous) {
-      return tx.membership.update({
-        where: { id: previous.id },
-        data: { status: "ACTIVE", role: invite.role },
-        include: { family: true },
+    const membership = previous
+      ? await tx.membership.update({
+          where: { id: previous.id },
+          data: { status: "ACTIVE", role: invite.role },
+          include: { family: true },
+        })
+      : await tx.membership.create({
+          data: {
+            userId,
+            familyId: invite.familyId,
+            role: invite.role,
+            status: "ACTIVE",
+          },
+          include: { family: true },
+        });
+
+    const linked = await tx.familyProfile.findFirst({
+      where: { familyId: invite.familyId, linkedUserId: userId },
+    });
+    if (!linked) {
+      await tx.familyProfile.create({
+        data: {
+          familyId: invite.familyId,
+          name: user.name?.trim() || user.email.split("@")[0] || "Member",
+          relation: "OTHER",
+          avatarColor: "#2A6F97",
+          linkedUserId: userId,
+        },
       });
     }
 
-    return tx.membership.create({
-      data: {
-        userId,
-        familyId: invite.familyId,
-        role: invite.role,
-        status: "ACTIVE",
-      },
-      include: { family: true },
-    });
+    return membership;
   });
 }
 
@@ -138,5 +158,52 @@ export async function cancelInvite(userId: string, inviteId: string) {
 
   if (!invite) throw new Error("NOT_FOUND");
 
-  await db.invite.delete({ where: { id: invite.id } });
+  await db.invite.update({
+    where: { id: invite.id },
+    data: { revokedAt: new Date() },
+  });
+}
+
+export async function resendInvite(userId: string, inviteId: string) {
+  const membership = await requireFamilyMembership(userId);
+  if (!canManageFamily(membership.role)) throw new Error("FORBIDDEN");
+
+  const existing = await db.invite.findFirst({
+    where: {
+      id: inviteId,
+      familyId: membership.familyId,
+      acceptedAt: null,
+      revokedAt: null,
+    },
+    include: {
+      family: true,
+      invitedBy: { select: { name: true, email: true } },
+    },
+  });
+  if (!existing) throw new Error("NOT_FOUND");
+
+  const token = randomBytes(24).toString("hex");
+  const invite = await db.invite.update({
+    where: { id: existing.id },
+    data: {
+      token,
+      expiresAt: addDays(new Date(), 7),
+      createdAt: new Date(),
+    },
+    include: {
+      family: true,
+      invitedBy: { select: { name: true, email: true } },
+    },
+  });
+
+  const acceptUrl = inviteUrl(invite.token);
+  await sendInviteEmail({
+    to: invite.email,
+    familyName: invite.family.name,
+    invitedByName: invite.invitedBy.name ?? invite.invitedBy.email ?? "A family member",
+    acceptUrl,
+    role: invite.role,
+  });
+
+  return { ...invite, acceptUrl };
 }

@@ -34,7 +34,13 @@ export async function saveDocumentFile(
   if (!canUploadDocuments(membership.role)) {
     throw new Error("FORBIDDEN");
   }
-  if (!canEditDocument(membership.role, userId, document)) {
+  if (
+    !canEditDocument(membership.role, userId, {
+      personId: document.personId,
+      createdById: document.createdById,
+      linkedUserId: document.person.linkedUserId,
+    })
+  ) {
     throw new Error("FORBIDDEN");
   }
 

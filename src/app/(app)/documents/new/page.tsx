@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DocumentForm } from "@/components/documents/document-form";
 import { canUploadDocuments } from "@/lib/roles";
-import { listActiveFamilyMembers } from "@/server/documents";
+import { listFamilyProfilesForDocs } from "@/server/documents";
 import { requireFamilyMembership } from "@/server/family";
 import { requireSession } from "@/server/session";
 
@@ -18,7 +18,9 @@ export default async function NewDocumentPage() {
     redirect("/dashboard");
   }
 
-  const members = await listActiveFamilyMembers(membership.familyId);
+  const profiles = await listFamilyProfilesForDocs(membership.familyId);
+  const defaultProfile =
+    profiles.find((profile) => profile.name)?.id ?? profiles[0]?.id ?? "";
 
   return (
     <div className="grid gap-6">
@@ -32,11 +34,11 @@ export default async function NewDocumentPage() {
       </header>
 
       <DocumentForm
-        members={members.map((member) => ({
-          id: member.user.id,
-          name: member.user.name ?? member.user.email ?? "Family member",
+        members={profiles.map((profile) => ({
+          id: profile.id,
+          name: profile.name,
         }))}
-        initial={{ personId: session.user.id }}
+        initial={{ personId: defaultProfile }}
       />
     </div>
   );

@@ -1,16 +1,11 @@
-import { signOut } from "@/auth";
+import { signOutAction } from "@/server/actions/auth";
 import { Button } from "@/components/ui/button";
 
 export function SignOutButton() {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut({ redirectTo: "/" });
-      }}
-    >
+    <form action={signOutAction}>
       <Button type="submit" variant="secondary">
-        Sign out
+        Sign out of this device
       </Button>
     </form>
   );

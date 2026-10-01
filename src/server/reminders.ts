@@ -45,7 +45,7 @@ export async function runDailyReminders(now = new Date()) {
       },
     },
     include: {
-      person: { select: { id: true, name: true, email: true } },
+      person: { select: { id: true, name: true } },
       family: {
         include: {
           memberships: {
@@ -87,7 +87,7 @@ export async function runDailyReminders(now = new Date()) {
         await sendReminderEmail({
           to: email,
           documentTitle: document.title,
-          personName: document.person.name ?? document.person.email ?? "Family member",
+          personName: document.person.name || "Family member",
           relative: formatRelativeExpiry(document.expiryDate, now),
           absoluteDate: formatLongDate(document.expiryDate),
           windowLabel: candidate.label,

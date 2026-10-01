@@ -74,31 +74,60 @@ async function main() {
   }
 
   await db.document.deleteMany({ where: { familyId: family.id } });
+  await db.familyProfile.deleteMany({ where: { familyId: family.id } });
+
+  const papaProfile = await db.familyProfile.create({
+    data: {
+      familyId: family.id,
+      name: "Papa",
+      relation: "FATHER",
+      avatarColor: "#1F5E4A",
+      linkedUserId: owner.id,
+    },
+  });
+  const ammiProfile = await db.familyProfile.create({
+    data: {
+      familyId: family.id,
+      name: "Ammi",
+      relation: "MOTHER",
+      avatarColor: "#D9534F",
+      linkedUserId: ammi.id,
+    },
+  });
+  const hassanProfile = await db.familyProfile.create({
+    data: {
+      familyId: family.id,
+      name: "Hassan",
+      relation: "SON",
+      avatarColor: "#2A6F97",
+      linkedUserId: hassan.id,
+    },
+  });
 
   const papers = [
     {
       title: "Papa's passport",
       type: "PASSPORT" as const,
-      personId: owner.id,
+      personId: papaProfile.id,
       expiryDate: addDays(new Date(), 18),
     },
     {
       title: "Ammi's CNIC",
       type: "CNIC" as const,
-      personId: ammi.id,
+      personId: ammiProfile.id,
       expiryDate: addDays(new Date(), 6),
     },
     {
       title: "Family car insurance",
       type: "INSURANCE" as const,
-      personId: owner.id,
+      personId: papaProfile.id,
       expiryDate: addDays(new Date(), -4),
       status: "EXPIRED" as const,
     },
     {
       title: "Hassan's driving license",
       type: "DRIVING_LICENSE" as const,
-      personId: hassan.id,
+      personId: hassanProfile.id,
       expiryDate: addDays(new Date(), 86),
     },
   ];
@@ -118,6 +147,23 @@ async function main() {
         remind7: true,
         remind1: true,
       },
+    });
+  }
+
+  for (const userId of [owner.id, ammi.id, hassan.id]) {
+    await db.reminderPreference.upsert({
+      where: { userId },
+      update: {},
+      create: {
+        userId,
+        windows: [30, 7, 1, 0],
+        timezone: "Asia/Karachi",
+      },
+    });
+    await db.userPreference.upsert({
+      where: { userId },
+      update: {},
+      create: { userId },
     });
   }
 

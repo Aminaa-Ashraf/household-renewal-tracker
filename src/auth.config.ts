@@ -13,6 +13,7 @@ export const authConfig = {
     jwt({ token, user }) {
       if (user?.id) {
         token.id = user.id;
+        token.issuedAt = Math.floor(Date.now() / 1000);
       }
       return token;
     },

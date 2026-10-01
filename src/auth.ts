@@ -67,4 +67,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(db),
   providers,
+  callbacks: {
+    ...authConfig.callbacks,
+    async jwt({ token, user }) {
+      if (user?.id) {
+        token.id = user.id;
+        token.issuedAt = Math.floor(Date.now() / 1000);
+      }
+
+      if (typeof token.id === "string") {
+        const dbUser = await db.user.findUnique({
+          where: { id: token.id },
+          select: { sessionsInvalidBefore: true },
+        });
+        const invalidBefore = dbUser?.sessionsInvalidBefore
+          ? Math.floor(dbUser.sessionsInvalidBefore.getTime() / 1000)
+          : 0;
+        const issuedAt =
+          typeof token.issuedAt === "number"
+            ? token.issuedAt
+            : typeof token.iat === "number"
+              ? token.iat
+              : 0;
+        if (invalidBefore && issuedAt < invalidBefore) {
+          return {};
+        }
+      }
+
+      return token;
+    },
+  },
 });

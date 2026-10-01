@@ -42,11 +42,33 @@ export function canUploadDocuments(role: Role) {
 export function canEditDocument(
   role: Role,
   userId: string,
-  document: { personId: string; createdById: string },
+  document: {
+    personId: string;
+    createdById: string;
+    linkedUserId?: string | null;
+  },
 ) {
   if (role === "OWNER") return true;
   if (role === "VIEWER") return false;
   return (
-    document.personId === userId || document.createdById === userId
+    document.linkedUserId === userId ||
+    document.personId === userId ||
+    document.createdById === userId
+  );
+}
+
+export const FAMILY_RELATION_OPTIONS = [
+  { value: "FATHER", label: "Father" },
+  { value: "MOTHER", label: "Mother" },
+  { value: "SON", label: "Son" },
+  { value: "DAUGHTER", label: "Daughter" },
+  { value: "SPOUSE", label: "Spouse" },
+  { value: "OTHER", label: "Other" },
+] as const;
+
+export function relationLabel(relation: string) {
+  return (
+    FAMILY_RELATION_OPTIONS.find((item) => item.value === relation)?.label ??
+    relation
   );
 }

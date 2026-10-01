@@ -15,7 +15,7 @@ import {
 } from "@/lib/roles";
 import {
   getDocumentForUser,
-  listActiveFamilyMembers,
+  listFamilyProfilesForDocs,
 } from "@/server/documents";
 import { requireSession } from "@/server/session";
 
@@ -37,8 +37,12 @@ export default async function DocumentDetailPage({ params }: Params) {
     notFound();
   }
 
-  const canEdit = canEditDocument(membership.role, session.user.id, document);
-  const members = await listActiveFamilyMembers(membership.familyId);
+  const canEdit = canEditDocument(membership.role, session.user.id, {
+    personId: document.personId,
+    createdById: document.createdById,
+    linkedUserId: document.person.linkedUserId,
+  });
+  const profiles = await listFamilyProfilesForDocs(membership.familyId);
   const expiry = document.expiryDate;
 
   return (
@@ -57,8 +61,7 @@ export default async function DocumentDetailPage({ params }: Params) {
           <StatusBadge urgency={getUrgency(expiry)} />
         </div>
         <p className="text-ink-muted">
-          {document.person.name ?? document.person.email} ·{" "}
-          {documentTypeLabel(document.type)}
+          {document.person.name} · {documentTypeLabel(document.type)}
         </p>
         <p className="text-lg font-semibold tracking-tight">
           {formatRelativeExpiry(expiry)}
@@ -148,9 +151,9 @@ export default async function DocumentDetailPage({ params }: Params) {
           <h2 className="font-display text-2xl font-semibold">Edit paper</h2>
           <DocumentForm
             documentId={document.id}
-            members={members.map((member) => ({
-              id: member.user.id,
-              name: member.user.name ?? member.user.email ?? "Family member",
+            members={profiles.map((profile) => ({
+              id: profile.id,
+              name: profile.name,
             }))}
             initial={{
               title: document.title,

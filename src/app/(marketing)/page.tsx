@@ -32,12 +32,15 @@ export default function HomePage() {
                 >
                   Start your family vault (free)
                 </ButtonLink>
-                <Link
-                  href="/login"
-                  className="text-center text-base font-medium text-ink-muted underline decoration-rule-strong underline-offset-4 transition-colors hover:text-ink sm:text-left"
-                >
-                  I already have an account
-                </Link>
+                <p className="text-center text-base text-ink-muted sm:text-left">
+                  Already have an account?{" "}
+                  <Link
+                    href="/login"
+                    className="font-semibold text-accent underline-offset-4 hover:underline"
+                  >
+                    Sign in
+                  </Link>
+                </p>
               </div>
             </div>
 
@@ -69,12 +72,6 @@ export default function HomePage() {
                     title="Mother's CNIC"
                     meta="expired 4 days ago · 27 Sept 2026"
                     badge={{ label: "Expired", tone: "red" }}
-                  />
-                  <HeroRow
-                    avatar={{ initial: "C", tone: "bg-amber-soft text-amber" }}
-                    title="Car token tax"
-                    meta="safe until Mar 2027"
-                    badge={{ label: "All good", tone: "green" }}
                   />
                 </ul>
               </div>
@@ -358,11 +355,8 @@ export default function HomePage() {
             <Link href="/#faq" className="text-white/70 hover:text-white">
               FAQ
             </Link>
-            <Link href="/signup" className="text-white/70 hover:text-white">
-              Create account
-            </Link>
-            <Link href="/login" className="text-white/70 hover:text-white">
-              Sign in
+            <Link href="/#privacy" className="text-white/70 hover:text-white">
+              Privacy
             </Link>
           </nav>
         </div>

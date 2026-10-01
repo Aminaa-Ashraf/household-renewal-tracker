@@ -10,8 +10,10 @@ Built for parents and adult children, not a personal reminder app.
 
 - Shows what is expiring, whose it is, and how soon
 - Color states: safe, due in 30 days, due in 7 days, expired
+- Family profiles without login (Mother, Father, etc.) plus member accounts
 - Shared household with Owner, Member, and Viewer roles
-- Invite family by email and accept an invite link
+- Invite by email with copy link, WhatsApp share, resend, and revoke
+- Reminder preferences, exports, and account controls in Settings
 - Private image/PDF uploads with authorized download
 - Daily reminder emails at 30 / 7 / 1 days and on expiry day
 
@@ -57,9 +59,9 @@ Demo login after seed:
 | `/dashboard` | Due-soon list |
 | `/documents/new` | Add a paper |
 | `/documents/[id]` | Paper details, file preview, reminders |
-| `/family` | Members and invites |
+| `/family` | People, members, invites, household danger zone |
 | `/invites/[token]` | Accept invite |
-| `/settings` | Account |
+| `/settings` | Account, reminders, preferences, export, sessions |
 
 ## Environment
 
