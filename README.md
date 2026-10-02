@@ -8,14 +8,14 @@ Built for parents and adult children, not a personal reminder app.
 
 ## What it does
 
-- Shows what is expiring, whose it is, and how soon
-- Color states: safe, due in 30 days, due in 7 days, expired
+- See what is expiring, whose it is, and how soon
+- Color status: safe, due in 30 days, due in 7 days, expired
 - Family profiles without login (Mother, Father, etc.) plus member accounts
 - Shared household with Owner, Member, and Viewer roles
-- Invite by email with copy link, WhatsApp share, resend, and revoke
-- Reminder preferences, exports, and account controls in Settings
+- Invite by email — copy link, WhatsApp share, resend, revoke
+- Reminder preferences, CSV/PDF export, and session controls
 - Private image/PDF uploads with authorized download
-- Daily reminder emails at 30 / 7 / 1 days and on expiry day
+- Email reminders at 30 / 7 / 1 days before expiry, and on the day
 
 ## Stack
 
@@ -24,9 +24,9 @@ Built for parents and adult children, not a personal reminder app.
 | App | Next.js 16 (App Router) + TypeScript |
 | UI | React 19, Tailwind CSS |
 | Data | PostgreSQL + Prisma |
-| Auth | Auth.js (email/password, optional Google and magic link) |
-| Files | Vercel Blob (or local `/storage` fallback) |
-| Email | Resend (or console log in local dev) |
+| Auth | Auth.js (email/password, optional Google) |
+| Files | Vercel Blob (local `/storage` fallback) |
+| Email | Resend (console fallback in local dev) |
 | Hosting | Vercel + daily cron |
 
 ## Quick start
@@ -42,74 +42,62 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Demo login after seed:
+**Demo logins** (after seed):
 
-- `papa@khan.demo` / `demo-pass-123` (owner)
-- `ammi@khan.demo` / `demo-pass-123` (member)
-- `hassan@khan.demo` / `demo-pass-123` (viewer)
+| Email | Password | Role |
+|-------|----------|------|
+| `papa@khan.demo` | `demo-pass-123` | Owner |
+| `ammi@khan.demo` | `demo-pass-123` | Member |
+| `hassan@khan.demo` | `demo-pass-123` | Viewer |
 
 ## Routes
 
 | Path | Purpose |
 |------|---------|
-| `/` | Public home |
-| `/login` | Sign in |
-| `/signup` | Create an account |
-| `/onboarding` | Create your household |
-| `/dashboard` | Due-soon list |
+| `/` | Public landing |
+| `/login` · `/signup` | Auth |
+| `/onboarding` | Create household |
+| `/dashboard` | Due-soon papers |
 | `/documents/new` | Add a paper |
-| `/documents/[id]` | Paper details, file preview, reminders |
-| `/family` | People, members, invites, household danger zone |
+| `/documents/[id]` | Paper details & file |
+| `/family` | People, members, invites |
 | `/invites/[token]` | Accept invite |
-| `/settings` | Account, reminders, preferences, export, sessions |
+| `/settings` | Account, reminders, export |
 
 ## Environment
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | Postgres URL for `household_renewal_tracker` |
-| `AUTH_SECRET` | Session signing key |
-| `AUTH_URL` | App URL, e.g. `http://localhost:3000` |
-| `GOOGLE_CLIENT_ID` | Optional Google sign-in |
-| `GOOGLE_CLIENT_SECRET` | Optional Google sign-in |
-| `RESEND_API_KEY` | Optional invite + reminder email |
-| `EMAIL_FROM` | Sender address |
-| `BLOB_READ_WRITE_TOKEN` | Optional Vercel Blob private uploads |
-| `CRON_SECRET` | Protects the daily reminder job |
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `DATABASE_URL` | Yes | Postgres connection string |
+| `AUTH_SECRET` | Yes | Session signing key |
+| `AUTH_URL` | Yes | App URL (`http://localhost:3000`) |
+| `CRON_SECRET` | Yes | Protects `/api/cron/reminders` |
+| `GOOGLE_CLIENT_ID` | No | Google sign-in |
+| `GOOGLE_CLIENT_SECRET` | No | Google sign-in |
+| `RESEND_API_KEY` | No | Invite & reminder email |
+| `EMAIL_FROM` | No | Sender address |
+| `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob private uploads |
 
-Without `RESEND_API_KEY`, emails print to the server console. Without `BLOB_READ_WRITE_TOKEN`, files save under `/storage` and stay private through `/api/files/[id]`.
+Without `RESEND_API_KEY`, emails print to the server console. Without `BLOB_READ_WRITE_TOKEN`, files save under `/storage`.
 
-## Test reminders locally
+## Deploy
 
-1. Seed or create a paper with an expiry date 7 days from today.
-2. Run:
-
-```bash
-curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/reminders
-```
-
-3. Check the terminal for `[email:dev]` output (or your Resend inbox).
-4. Open the paper — the reminder log should show the window once.
-
-## Deploy (Vercel)
-
-1. Import the GitHub repo in Vercel (team: Aminahh).
-2. Add a hosted Postgres (Neon) and set `DATABASE_URL`.
-3. Set `AUTH_SECRET`, `AUTH_URL` (your Vercel URL), and `CRON_SECRET`.
-4. Optional: `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, Google OAuth.
-5. Deploy — `npm run build` runs `prisma migrate deploy` then `next build`.
-6. After first deploy: `npx prisma db seed` against the production `DATABASE_URL` if you want demo users.
+1. Import this repo in [Vercel](https://vercel.com).
+2. Provision hosted Postgres (e.g. Neon) and set `DATABASE_URL`.
+3. Set `AUTH_SECRET`, `AUTH_URL` (your production URL), and `CRON_SECRET`.
+4. Optional: Blob, Resend, Google OAuth.
+5. Deploy — `npm run build` runs migrations, then `next build`.
 
 ## Scripts
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run db:migrate
-npm run db:deploy
-npm run db:studio
-npm run db:seed
+npm run dev        # local development
+npm run build      # migrate + production build
+npm run start      # serve production build
+npm run db:migrate # create/apply migrations (dev)
+npm run db:deploy  # apply migrations (prod)
+npm run db:seed    # demo household
+npm run db:studio  # Prisma Studio
 ```
 
 ## License
